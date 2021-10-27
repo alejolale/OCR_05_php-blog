@@ -1,0 +1,12 @@
+{
+    "name": "sergio/ocr_blog",
+    "authors": [
+        {
+            "name": "sergio",
+            "email": "sergio.prieto01@outlook.com"
+        }
+    ],
+    "require": {
+        "ext-pdo": "*"
+    }
+}
