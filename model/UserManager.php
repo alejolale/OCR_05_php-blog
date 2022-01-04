@@ -38,6 +38,7 @@ class UserManager extends Manager {
             'email' => $email,
             'password' => $password
         ));
+        //TODO return value
     }
 
     public function createUser($firstname, $lastname, $email, $password) {
@@ -48,6 +49,7 @@ class UserManager extends Manager {
             'email' => $email,
             'password' => $password,
         ));
+        //TODO return value
     }
 
     public function updateUser($id, $firstname, $lastname, $email) {

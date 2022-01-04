@@ -4,6 +4,7 @@ $errors = [];
 $responseMessage = '';
 
 if (!empty($_POST)) {
+    //TODO use htmlspecialchars to ignore html code script attacks
     $lastname = $_POST['lastname'];
     $firstname = $_POST['firstname'];
     $email = $_POST['email'];
@@ -40,7 +41,7 @@ if (!empty($_POST)) {
             $responseMessage = 'Données envoyées';
         } else {
             $responseMessage = "Oops, Une erreur s'est produit, veuillez réessayer !";
-            $errors[] = "Erreur d'envoie d'email";
+            $errors[] = "Erreur d'envoi d'email";
         }
     }else {
         $responseMessage = 'Formulaire pas complet, Veuillez réessayer !';
