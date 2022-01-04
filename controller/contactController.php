@@ -4,11 +4,10 @@ $errors = [];
 $responseMessage = '';
 
 if (!empty($_POST)) {
-    //TODO use htmlspecialchars to ignore html code script attacks
-    $lastname = $_POST['lastname'];
-    $firstname = $_POST['firstname'];
-    $email = $_POST['email'];
-    $message = $_POST['message'];
+    $lastname = htmlspecialchars($_POST['lastname']);
+    $firstname = htmlspecialchars($_POST['firstname']);
+    $email = htmlspecialchars($_POST['email']);
+    $message = htmlspecialchars($_POST['message']);
 
     if (empty($lastname)) {
         $errors[] = 'Lastname is empty';
