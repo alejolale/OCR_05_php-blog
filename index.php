@@ -1,20 +1,33 @@
 <?php
+session_start();
 require('controller/index.php');
 
-if (isset($_GET['action'])) {
-    //TODO router navigations and access
-    if ($_GET['action']=== 'contact') {
-        contact();
+$testController = New Controller();
+
+try {
+    if (isset($_GET['action'])) {
+        if ($_GET['action']=== 'contact') {
+            $testController->contact();
+        }
+        if ($_GET['action']=== 'login') {
+            $testController->login();
+        }
+        if ($_GET['action']=== 'signup') {
+            $testController->signup();
+        }
+        if ($_GET['action']=== 'logout') {
+            $testController->logout();
+        }
+        if ($_GET['action']=== 'users') {
+            $testController->users();
+        }if ($_GET['action']=== 'user') {
+            $testController->users();
+        }
     }
-    if ($_GET['action']=== 'login') {
-        login();
-    }
-    if ($_GET['action']=== 'users') {
-        users();
-    }else if ($_GET['action']=== 'user') {
-            user($_GET['id']);
+    else {
+        $testController->index();
     }
 }
-else {
-    index();
+catch (Exception $error) {
+    $testController->error();
 }

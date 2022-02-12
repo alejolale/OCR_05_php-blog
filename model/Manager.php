@@ -20,7 +20,7 @@ abstract class Manager {
         }
         catch (Exception $e)
         {
-            die('Database connect Erreur: ' . $e->getMessage());
+            throw new Exception("Erreur de connexion à la base de données");
         }
     }
 }

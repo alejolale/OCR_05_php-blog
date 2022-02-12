@@ -12,7 +12,11 @@
                 <li class="nav-item"><a class="nav-link" href="post.html">Posts</a></li>
                 <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
                 <!--TODO add logout on auth user-->
+                <?php if(isset($_SESSION['LOGGED_USER'])): ?>
+                    <li class="nav-item"><a class="nav-link" href=<?php echo '/?action=logout' ?>>Déconnexion</a></li>
+                <?php else: ?>
                 <li class="nav-item"><a class="nav-link" href=<?php echo '/?action=login' ?>>Se connecter</a></li>
+                <?php endif; ?>
             </ul>
         </div>
     </div>

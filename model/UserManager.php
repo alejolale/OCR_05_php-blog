@@ -33,23 +33,42 @@ class UserManager extends Manager {
     }
 
     public function login($email, $password) {
-        $req = $this->db->prepare('SELECT id, email, password FROM user WHERE email = :email AND password = :password');
+        $req = $this->db->prepare('SELECT * FROM user WHERE email = :email AND password = :password');
         $req->execute(array(
             'email' => $email,
             'password' => $password
         ));
-        //TODO return value
+        $data = $req->fetch();
+
+        //var_dump($data);
+        if ($data) {
+            $user= new User($data);
+            return $user;
+        }
+
+        //var_dump(isset($data['id']));
+        //print("<pre>".print_r($data,true)."</pre>");
+
+
+        return null;
     }
 
     public function createUser($firstname, $lastname, $email, $password) {
-        $req = $this->db->prepare('INSERT INTO user (id, firstname, lastname, email, password) VALUES (NULL, :firstname, :lastname, :email, :password )');
+        $req = $this->db->prepare('INSERT INTO user (firstname, lastname, email, password) VALUES (:firstname, :lastname, :email, :password )');
         $req->execute(array(
             'firstname' => $firstname,
             'lastname' => $lastname,
             'email' => $email,
             'password' => $password,
         ));
-        //TODO return value
+        $data = $req->fetch();
+
+        if (isset($data)) {
+            $user= $this->login($email, $password);
+            var_dump('user', $user);
+            return $user;
+        }
+        return null;
     }
 
     public function updateUser($id, $firstname, $lastname, $email) {
