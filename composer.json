@@ -8,6 +8,7 @@
     ],
     "require": {
         "ext-pdo": "*",
-        "mailjet/mailjet-apiv3-php": "^1.5"
+        "mailjet/mailjet-apiv3-php": "^1.5",
+        "squizlabs/php_codesniffer": "3.*"
     }
 }

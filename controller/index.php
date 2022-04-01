@@ -1,52 +1,85 @@
 <?php
-require_once('model/UserManager.php');
 
-class Controller {
+//declare(strict_types=1);
+
+namespace Controller;
+
+use Session\Session;
+use UserManager\UserManager;
+use PublicationManager\PublicationManager;
+
+require_once 'model/UserManager.php';
+require_once 'model/PublicationManager.php';
+require_once 'controller/Session.php';
+
+class Controller
+{
     private $userManager;
+    private $publicationManager;
 
     public function __construct()
     {
-        $this->userManager = New UserManager();
+        $this->userManager = new UserManager();
+        $this->publicationManager = new PublicationManager();
     }
 
-    public function index(){
+    public function index()
+    {
         require('view/indexView.php');
     }
 
-    public function login() {
-        if (isset($_POST['email']) && isset($_POST['password'])) {
-            $user = $this->userManager->login($_POST['email'], $_POST['password']);
+    public function login()
+    {
+        $email = filter_input(INPUT_POST, 'email');
+        $password = filter_input(INPUT_POST, 'password');
+
+        if (isset($email) && isset($password)) {
+            //echo(password_hash($password, PASSWORD_DEFAULT));
+            //TODO verify unhash
+            //$user = $this->userManager->login($email, password_hash($password, PASSWORD_DEFAULT));
+            $user = $this->userManager->login($email, $password);
 
             if ($user) {
-                var_dump($user);
-                $_SESSION['LOGGED_USER']= $user->email();
+                $email = $user->email();
+                $userId = $user->id();
+                /*echo('eyyy hre in login');
+                var_dump($email);*/
+                Session::put('LOGGED_USER', $email);
+                Session::put('USER_ID', $userId);
                 //TODO afficher vue une fois logé -- page posts
-            }
-            //vue error
-            /*else {
+                $this->posts();
+                //require('view/postsView.php');
+                //header("Location: index.php");
+            } else {
                 $message = "Le nom d'utilisateur ou le mot de passe est incorrect.";
-            }*/
+                require('view/loginView.php');
+            }
+
         } else {
             require('view/loginView.php');
         }
     }
 
-    public  function logout() {
+    public function logout()
+    {
         session_destroy();
         header('Location: index.php');
     }
 
-    public function signup() {
-        if (isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['passwordConfirmation'])) {
+    public function signup()
+    {
+        $firstname = filter_input(INPUT_POST, 'firstname');
+        $lastname = filter_input(INPUT_POST, 'lastname');
+        $email = filter_input(INPUT_POST, 'email');
+        $password = filter_input(INPUT_POST, 'password');
+        $passwordConfirmation = filter_input(INPUT_POST, 'passwordConfirmation');
 
-            if($_POST['password'] === $_POST['passwordConfirmation']) {
-
-                //var_dump('hello world',$_POST['password'], password_hash($_POST['password'], PASSWORD_DEFAULT) );
-                $user = $this->userManager->createUser($_POST['firstname'], $_POST['lastname'], $_POST['email'], password_hash($_POST['password'], PASSWORD_DEFAULT));
-                var_dump($user);
-                //$_SESSION['LOGGED_USER']= $user->email();
-            }else {
-                $passwordValidationError= true;
+        if (isset($firstname) && isset($lastname) && isset($email) && isset($password) && isset($passwordConfirmation)) {
+            if ($password === $passwordConfirmation) {
+                $this->userManager->createUser($firstname, $lastname, $email, password_hash($password, PASSWORD_DEFAULT));
+                Session::put('LOGGED_USER', $email);
+            } else {
+                $validationError = true;
                 $message = "La validation du mot de passe est incorrect.";
             }
         }
@@ -54,17 +87,84 @@ class Controller {
         require('view/signupView.php');
     }
 
-    public function contact() {
+    public function posts()
+    {
+        $hasSession = Session::get('LOGGED_USER');
+
+        $title = filter_input(INPUT_POST, 'title');
+        $header = filter_input(INPUT_POST, 'header');
+        $content = filter_input(INPUT_POST, 'content');
+
+        $posts =  $this->publicationManager->getPublications();
+
+
+        if (isset($title) && isset($header) && isset($content)) {
+            $userId = Session::get('USER_ID');
+
+            //TODO create post
+            $newPost = $this->publicationManager->createPublication($userId, $title, $header, $content);
+
+            //TODO verify if
+            if (isset($newPost)) {
+                //TODO redirect to personal posts page
+                $message = "Post crée avec succès!";
+                $this->myPosts($message);
+            } else {
+                $message = "Erreur dans la création du post, veuillez reessayer";
+                require('view/postsView.php');
+            }
+
+        } else {
+            require('view/postsView.php');
+        }
+    }
+
+    public function post()
+    {
+        $id = filter_input(INPUT_GET, 'id');
+
+        if (isset($id)) {
+            $user = $this->publicationManager->getPublication($id);
+
+            if ($user) {
+                require('view/postView.php');
+            } else {
+                $message = "La publication n'existe pas";
+                $this->myPosts($message);
+            }
+        }
+        //require('view/postsView.php');
+
+        //require('view/postView.php');
+    }
+
+    public function myPosts($message)
+    {
+        $message;
+        $userId = Session::get('USER_ID');
+        $posts = $this->publicationManager->getPublicationsByUserId($userId);
+
+        /*echo('<pre>');
+        print_r($posts);
+        echo('</pre>');*/
+
+        //var_dump($posts);
+
+        require('view/myPostsView.php');
+    }
+
+    public function contact()
+    {
         //TODO verify email sending
         $errors = [];
         $responseMessage = '';
 
-        if (!empty($_POST)) {
-            $lastname = htmlspecialchars($_POST['lastname']);
-            $firstname = htmlspecialchars($_POST['firstname']);
-            $email = htmlspecialchars($_POST['email']);
-            $message = htmlspecialchars($_POST['message']);
+        $firstname = htmlspecialchars(filter_input(INPUT_POST, 'firstname'));
+        $lastname = htmlspecialchars(filter_input(INPUT_POST, 'lastname'));
+        $email = htmlspecialchars(filter_input(INPUT_POST, 'email'));
+        $message = htmlspecialchars(filter_input(INPUT_POST, 'message'));
 
+        if (!empty($firstname || $lastname || $email || $message)) {
             if (empty($lastname)) {
                 $errors[] = 'Lastname is empty';
             }
@@ -92,13 +192,13 @@ class Controller {
                 $bodyParagraphs = ["Nom: {$lastname}", "Prénom: {$firstname}", "Email: {$email}", "Message:", $message];
                 $body = join(PHP_EOL, $bodyParagraphs);
 
-                $sendEmail= mail($toEmail, $emailSubject, $body, $headers);
+                $sendEmail = mail($toEmail, $emailSubject, $body, $headers);
                 if ($sendEmail) {
                     $responseMessage = 'Données envoyées';
                 } else {
                     $responseMessage = "Oops, Une erreur s'est produit, veuillez réessayer !";
                 }
-            }else {
+            } else {
                 $responseMessage = 'Formulaire pas complet, Veuillez réessayer !';
             }
         }
@@ -106,19 +206,23 @@ class Controller {
         require('view/contactFormAnswer.php');
     }
 
-    public function users(){
+    public function users()
+    {
         $this->userManager = new UserManager();
         $users = $this->userManager->getUsers();
 
-        if (isset($_GET['id'])) {
-            $user = $this->userManager->getUser($_GET['id']);
+        $id = filter_input(INPUT_GET, 'id');
+
+        if (isset($id)) {
+            $user = $this->userManager->getUser($id);
             require('view/userView.php');
-        }else {
+        } else {
             require('view/usersView.php');
         }
     }
 
-    public function error() {
+    public function error()
+    {
         require('view/errorView.php');
     }
 

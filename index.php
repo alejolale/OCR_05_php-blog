@@ -1,33 +1,52 @@
 <?php
-session_start();
-require('controller/index.php');
 
-$testController = New Controller();
+declare(strict_types=1);
+
+session_start();
+require 'controller/index.php';
+
+use Controller\Controller;
+
+$testController = new Controller();
 
 try {
+    $action = filter_input(INPUT_GET, 'contact');
+
     if (isset($_GET['action'])) {
-        if ($_GET['action']=== 'contact') {
+        if ($_GET['action'] === 'contact') {
             $testController->contact();
         }
-        if ($_GET['action']=== 'login') {
+
+        if ($_GET['action'] === 'login') {
             $testController->login();
         }
-        if ($_GET['action']=== 'signup') {
+
+        if ($_GET['action'] === 'signup') {
             $testController->signup();
         }
-        if ($_GET['action']=== 'logout') {
+
+        if ($_GET['action'] === 'logout') {
             $testController->logout();
         }
-        if ($_GET['action']=== 'users') {
-            $testController->users();
-        }if ($_GET['action']=== 'user') {
+
+        if ($_GET['action'] === 'posts') {
+            $testController->posts();
+        }
+
+        if ($_GET['action'] === 'post') {
+            $testController->post();
+        }
+
+        if ($_GET['action'] === 'users') {
             $testController->users();
         }
-    }
-    else {
+
+        if ($_GET['action'] === 'user') {
+            $testController->users();
+        }
+    } else {
         $testController->index();
     }
-}
-catch (Exception $error) {
-    $testController->error();
+} catch (\Throwable) {
+    //$testController->error();
 }
