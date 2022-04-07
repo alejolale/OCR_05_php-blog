@@ -98,10 +98,12 @@ class Controller
         $hasSession = Session::get('LOGGED_USER');
         $id = filter_input(INPUT_GET, 'id');
         $edit = filter_input(INPUT_POST, 'edit');
-        $delete = filter_input(INPUT_POST, 'delete');
 
         if (isset($id)) {
             $post = $this->publicationManager->getPublication($id);
+            $userId = Session::get('USER_ID');
+            $action =  $edit ? '?action=post&id=' : '?action=postEdition&id=';
+            $isVisible = $post->userId() === $userId;
 
             if ($post) {
                 require('view/postView.php');
@@ -136,7 +138,29 @@ class Controller
         }
     }
 
-    public function postEdition() {
+    public function postEdition()
+    {
+        $hasSession = Session::get('LOGGED_USER');
+        $id = filter_input(INPUT_GET, 'id');
+        $edit = filter_input(INPUT_POST, 'edit');
+
+        if (isset($id)) {
+            $post = $this->publicationManager->getPublication($id);
+            $userId = Session::get('USER_ID');
+            $isVisible = $post->userId() === $userId;
+            $action =  $edit ? '?action=post&id=' : '?action=postEdition&id=';
+
+            if ($post) {
+                require('view/postView.php');
+            } else {
+                $message = "La publication n'existe pas";
+                $this->myPosts($message);
+            }
+        }
+    }
+
+    public function postUpdate()
+    {
         $id = filter_input(INPUT_GET, 'id');
         $title = filter_input(INPUT_POST, 'title');
         $header = filter_input(INPUT_POST, 'header');
@@ -154,8 +178,26 @@ class Controller
         }
     }
 
+    public function postDelete() {
+        $hasSession = Session::get('LOGGED_USER');
+        $userId = Session::get('USER_ID');
+        $postId = filter_input(INPUT_GET, 'id');
+        $post = $this->publicationManager->getPublication($postId);
+
+        $isDeletable = (int)$userId === $post->userId();
+
+        if (isset($hasSession) && isset($postId) && $isDeletable) {
+            $this->publicationManager->deletePublication($postId);
+            $message = "Post supprimé avec succès!";
+        } else {
+            $message = "Une erreur s'est produit, veuillez re-essayer!";
+        }
+        $this->myPosts($message);
+    }
+
     public function myPosts($message)
     {
+        $hasSession = Session::get('LOGGED_USER');
         $message;
         $userId = Session::get('USER_ID');
         $posts = $this->publicationManager->getPublicationsByUserId($userId);
@@ -163,10 +205,13 @@ class Controller
         /*echo('<pre>');
         print_r($posts);
         echo('</pre>');*/
-
         //var_dump($posts);
+        if (isset($hasSession)) {
+            require('view/myPostsView.php');
+        } else {
+            $this->posts();
+        }
 
-        require('view/myPostsView.php');
     }
 
     public function contact()

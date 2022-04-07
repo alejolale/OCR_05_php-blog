@@ -22,10 +22,13 @@
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
             <div class="flex mb-4">
-                <?php if ($hasSession) : ?>
-                    <form method="post" action=<?php echo '?action=post&id=' . $post->id(); ?> >
-                        <button type="submit" class="btn btn-primary" value="edit" name="edit">Editer</button>
-                        <button type="submit" class="btn btn-danger" value="delete" name="delete">Supprimer</button>
+                <?php if ($hasSession && $isVisible) : ?>
+                    <form method="post" action=<?php echo $action . $post->id(); ?> >
+
+                        <button type="submit" class="btn btn-primary" value="edit" name=<?= $edit ? "" : "edit" ?>>
+                            <?= $edit ? 'Retour' : 'Editer' ?>
+                        </button>
+                        <button type="button" class="btn btn-danger" value="delete" data-toggle="modal" data-target="#exampleModal">Supprimer</button>
                     </form>
                 <?php endif; ?>
             </div>
@@ -34,7 +37,7 @@
                 <!--TODO  edit delete avec un utilisateur admin-->
                 <?php if ($edit) : ?>
                     <h2 class="py-5">Edition du post</h2>
-                    <form method="post" action=<?php echo '/?action=editPost&id='.$post->id() ?> class="pb-5">
+                    <form method="post" action=<?php echo '/?action=postUpdate&id='.$post->id() ?> class="pb-5">
                         <div class="mb-3">
                             <label for="title" class="form-label">Titre du post :</label>
                             <input value="<?= $post->title() ?>" type="text" class="form-control" id="title" name="title" placeholder="Titre.." required>
@@ -80,6 +83,32 @@
                     </form>
                 <?php endif; ?>
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Suppresion du post</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Valider la suppresion du post ?
+                    </div>
+                    <div class="modal-footer">
+                        <form method="post" action=<?php echo '/?action=deletePost&id='.$post->id() ?> >
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                            <button type="submit" class="deletebtn btn btn-danger">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
     </div>
 </div>
 

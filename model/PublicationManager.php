@@ -34,7 +34,7 @@ class PublicationManager extends Manager
     {
         $publications = [];
 
-        $req = $this->db->prepare('SELECT id, title, created_at, header, content, user_id FROM publication WHERE user_id = ? ORDER BY p.created_at DESC');
+        $req = $this->db->prepare('SELECT id, title, created_at, header, content, user_id FROM publication WHERE user_id = ? ORDER BY created_at DESC');
         $req->execute(array($userId));
         $req->setFetchMode(\PDO::FETCH_ASSOC);
 
@@ -99,6 +99,14 @@ class PublicationManager extends Manager
             'header' => $header,
             'content' => $content,
             'edited_at' => $edited_at,
+            'id' => $id,
+        ));
+    }
+
+    public function deletePublication($id)
+    {
+        $req = $this->db->prepare('DELETE FROM publication WHERE id= :id');
+        $req->execute(array(
             'id' => $id,
         ));
     }

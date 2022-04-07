@@ -34,7 +34,7 @@ try {
         }
 
         if ($_GET['action'] === 'myPosts') {
-            $testController->posts();
+            $testController->myPosts();
         }
 
         if ($_GET['action'] === 'post') {
@@ -45,8 +45,16 @@ try {
             $testController->postCreation();
         }
 
-        if ($_GET['action'] === 'editPost') {
+        if ($_GET['action'] === 'postEdition') {
             $testController->postEdition();
+        }
+
+        if ($_GET['action'] === 'postUpdate') {
+            $testController->postUpdate();
+        }
+
+        if ($_GET['action'] === 'deletePost') {
+            $testController->postDelete();
         }
 
         if ($_GET['action'] === 'users') {
