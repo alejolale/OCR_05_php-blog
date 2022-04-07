@@ -26,7 +26,7 @@
                 </div>
             <?php endif; ?>
 
-            <?php if(isset($hasSession)): ?>
+            <?php if (isset($hasSession)) : ?>
                 <h2 class="py-5">Créer un nouveau post</h2>
                 <form method="post" action="/?action=postCreation" class="pb-5">
                     <div class="mb-3">
@@ -45,31 +45,10 @@
                 </form>
             <?php endif; ?>
 
-            <?php if(isset($posts) && count($posts) > 0 ): ?>
-                <h2 class="py-5">Dernières publications</h2>
-                <?php
-                foreach ($posts as $post) {
-                    ?>
-                    <div class="post-preview">
-                        <a href=<?php echo '/?action=post&id='.$post->id() ?>>
-                            <h2 class="post-title"><?= htmlspecialchars($post->title()) ?></h2>
-                            <h3 class="post-subtitle"><?= htmlspecialchars($post->header()) ?></h3>
-                        </a>
-                        <p class="post-meta">
-                            Posté par
-                            <a href=<?php echo '/?action=user&id='.$post->userId() ?>><?= htmlspecialchars($post->fullname()) ?></a>
-                            le <?= htmlspecialchars(date('d-m,  Y',strtotime($post->createdAt()))) ?>
-                        </p>
-                    </div>
-                    <hr />
-                <?php } ?>
-            <?php endif; ?>
-
-
-
-
+            <!-- TODO create pagination-->
+            <?php include_once 'posts.php' ?>
             <!-- Pager-->
-            <div class="clearfix"><a class="btn btn-primary float-right" href="#!">Older Posts →</a></div>
+            <div class="clearfix"><a class="btn btn-primary float-right" href="#!">TODO pagination →</a></div>
         </div>
     </div>
 </div>

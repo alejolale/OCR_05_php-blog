@@ -17,8 +17,18 @@
         </div>
     </div>
 </header>
-<?php include_once 'posts.php'?>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            <?php include_once 'posts.php'?>
+            <!-- Pager-->
+            <div class="clearfix"><a class="btn btn-primary float-right" href=<?php echo '/?action=posts' ?>>Voir les posts →</a></div>
+        </div>
+    </div>
+</div>
 <hr />
+
 <?php include_once 'contactForm.php' ?>
 <hr />
 <div class="container">

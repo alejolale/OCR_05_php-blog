@@ -23,6 +23,7 @@ class Controller
 
     public function index()
     {
+        $posts =  $this->publicationManager->getPublications(4);
         require('view/indexView.php');
     }
 
