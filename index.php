@@ -33,8 +33,20 @@ try {
             $testController->posts();
         }
 
+        if ($_GET['action'] === 'myPosts') {
+            $testController->posts();
+        }
+
         if ($_GET['action'] === 'post') {
             $testController->post();
+        }
+
+        if ($_GET['action'] === 'postCreation') {
+            $testController->postCreation();
+        }
+
+        if ($_GET['action'] === 'editPost') {
+            $testController->postEdition();
         }
 
         if ($_GET['action'] === 'users') {

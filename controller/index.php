@@ -1,7 +1,5 @@
 <?php
 
-//declare(strict_types=1);
-
 namespace Controller;
 
 use Session\Session;
@@ -90,21 +88,42 @@ class Controller
     public function posts()
     {
         $hasSession = Session::get('LOGGED_USER');
+        $posts =  $this->publicationManager->getPublications();
+
+        require('view/postsView.php');
+    }
+
+    public function post()
+    {
+        $hasSession = Session::get('LOGGED_USER');
+        $id = filter_input(INPUT_GET, 'id');
+        $edit = filter_input(INPUT_POST, 'edit');
+        $delete = filter_input(INPUT_POST, 'delete');
+
+        if (isset($id)) {
+            $post = $this->publicationManager->getPublication($id);
+
+            if ($post) {
+                require('view/postView.php');
+            } else {
+                $message = "La publication n'existe pas";
+                $this->myPosts($message);
+            }
+        }
+    }
+
+    public function postCreation()
+    {
+        $hasSession = Session::get('LOGGED_USER');
 
         $title = filter_input(INPUT_POST, 'title');
         $header = filter_input(INPUT_POST, 'header');
         $content = filter_input(INPUT_POST, 'content');
 
-        $posts =  $this->publicationManager->getPublications();
-
-
-        if (isset($title) && isset($header) && isset($content)) {
+        if (isset($hasSession) && isset($title) && isset($header) && isset($content)) {
             $userId = Session::get('USER_ID');
-
-            //TODO create post
             $newPost = $this->publicationManager->createPublication($userId, $title, $header, $content);
 
-            //TODO verify if
             if (isset($newPost)) {
                 //TODO redirect to personal posts page
                 $message = "Post crée avec succès!";
@@ -114,28 +133,25 @@ class Controller
                 require('view/postsView.php');
             }
 
-        } else {
-            require('view/postsView.php');
         }
     }
 
-    public function post()
-    {
+    public function postEdition() {
         $id = filter_input(INPUT_GET, 'id');
+        $title = filter_input(INPUT_POST, 'title');
+        $header = filter_input(INPUT_POST, 'header');
+        $content = filter_input(INPUT_POST, 'content');
 
-        if (isset($id)) {
-            $user = $this->publicationManager->getPublication($id);
-
-            if ($user) {
-                require('view/postView.php');
+        if (isset($id) && isset($title) && isset($header) && isset($content)) {
+            $this->publicationManager->updatePublication($id, $title, $header, $content);
+            $this->post();
+            /*if (isset($post)) {
             } else {
-                $message = "La publication n'existe pas";
-                $this->myPosts($message);
-            }
+            }*/
+        } else {
+            $message = "Erreur dans l'édition du post";
+            $this->myPosts($message);
         }
-        //require('view/postsView.php');
-
-        //require('view/postView.php');
     }
 
     public function myPosts($message)
@@ -166,7 +182,7 @@ class Controller
 
         if (!empty($firstname || $lastname || $email || $message)) {
             if (empty($lastname)) {
-                $errors[] = 'Lastname is empty';
+                $errors[] = 'Lastname is empty'; 
             }
 
             if (empty($firstname)) {

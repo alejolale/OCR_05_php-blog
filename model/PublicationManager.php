@@ -14,7 +14,8 @@ class PublicationManager extends Manager
     {
         $publications = [];
 
-        $req = $this->db->query('SELECT p.id, p.title, p.created_at, p.edited_at, p.header, p.content, p.user_id, CONCAT(u.firstname," ",u.lastname) AS fullname FROM publication AS p INNER JOIN user AS u ON u.id = p.user_id');
+        $req = $this->db->query('SELECT p.id, p.title, p.created_at, p.edited_at, p.header, p.content, p.user_id, CONCAT(u.firstname," ",u.lastname) AS fullname FROM publication AS p INNER JOIN user AS u ON u.id = p.user_id 
+            ORDER BY p.created_at DESC');
         $req->setFetchMode(\PDO::FETCH_ASSOC);
         $data = $req->fetchAll();
 
@@ -33,7 +34,7 @@ class PublicationManager extends Manager
     {
         $publications = [];
 
-        $req = $this->db->prepare('SELECT id, title, created_at, header, content, user_id FROM publication WHERE user_id = ?');
+        $req = $this->db->prepare('SELECT id, title, created_at, header, content, user_id FROM publication WHERE user_id = ? ORDER BY p.created_at DESC');
         $req->execute(array($userId));
         $req->setFetchMode(\PDO::FETCH_ASSOC);
 
@@ -49,7 +50,9 @@ class PublicationManager extends Manager
     public function getPublication($id)
     {
         $publicationId = (int) $id;
-        $req = $this->db->prepare('SELECT id, title, created_at, edited_at, header, content, user_id FROM publication WHERE id = ?');
+
+        $req = $this->db->prepare('SELECT p.id, p.title, p.created_at, p.edited_at, p.header, p.content, p.user_id, CONCAT(u.firstname," ",u.lastname) AS fullname FROM publication AS p 
+            INNER JOIN user AS u ON u.id = p.user_id WHERE p.id = ?');
         $req->execute(array($publicationId));
         $req->setFetchMode(\PDO::FETCH_ASSOC);
         $data = $req->fetch();
@@ -86,8 +89,10 @@ class PublicationManager extends Manager
         }
     }
 
-    public function updatePublication($id, $title, $header, $content, $edited_at)
+    public function updatePublication($id, $title, $header, $content)
     {
+        $edited_at = date("Y-m-d H:i:s");
+
         $req = $this->db->prepare('UPDATE publication SET title= :title, header= :header, content= :content, edited_at= :edited_at WHERE id= :id');
         $req->execute(array(
             'title' => $title,

@@ -28,7 +28,7 @@
 
             <?php if(isset($hasSession)): ?>
                 <h2 class="py-5">Créer un nouveau post</h2>
-                <form method="post" action="/?action=posts" class="pb-5">
+                <form method="post" action="/?action=postCreation" class="pb-5">
                     <div class="mb-3">
                         <label for="title" class="form-label">Titre du post :</label>
                         <input type="text" class="form-control" id="title" name="title" placeholder="Titre.." required>
