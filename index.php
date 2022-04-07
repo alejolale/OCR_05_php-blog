@@ -57,6 +57,10 @@ try {
             $testController->postDelete();
         }
 
+        if ($_GET['action'] === 'commentCreation') {
+            $testController->commentCreation();
+        }
+
         if ($_GET['action'] === 'users') {
             $testController->users();
         }

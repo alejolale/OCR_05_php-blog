@@ -5,9 +5,11 @@ namespace Controller;
 use Session\Session;
 use UserManager\UserManager;
 use PublicationManager\PublicationManager;
+use CommentManager\CommentManager;
 
 require_once 'model/UserManager.php';
 require_once 'model/PublicationManager.php';
+require_once 'model/CommentManager.php';
 require_once 'controller/Session.php';
 
 class Controller
@@ -19,6 +21,7 @@ class Controller
     {
         $this->userManager = new UserManager();
         $this->publicationManager = new PublicationManager();
+        $this->commentManager = new CommentManager();
     }
 
     public function index()
@@ -53,7 +56,6 @@ class Controller
                 $message = "Le nom d'utilisateur ou le mot de passe est incorrect.";
                 require('view/loginView.php');
             }
-
         } else {
             require('view/loginView.php');
         }
@@ -94,15 +96,17 @@ class Controller
         require('view/postsView.php');
     }
 
-    public function post()
+    public function post($message = null)
     {
         $hasSession = Session::get('LOGGED_USER');
         $id = filter_input(INPUT_GET, 'id');
         $edit = filter_input(INPUT_POST, 'edit');
+        $message;
 
         if (isset($id)) {
-            $post = $this->publicationManager->getPublication($id);
             $userId = Session::get('USER_ID');
+            $post = $this->publicationManager->getPublication($id);
+            $user = $userId ? $this->userManager->getUser($userId) : null;
             $action =  $edit ? '?action=post&id=' : '?action=postEdition&id=';
             $isVisible = $post->userId() === $userId;
 
@@ -135,7 +139,6 @@ class Controller
                 $message = "Erreur dans la création du post, veuillez reessayer";
                 require('view/postsView.php');
             }
-
         }
     }
 
@@ -179,7 +182,8 @@ class Controller
         }
     }
 
-    public function postDelete() {
+    public function postDelete()
+    {
         $hasSession = Session::get('LOGGED_USER');
         $userId = Session::get('USER_ID');
         $postId = filter_input(INPUT_GET, 'id');
@@ -212,7 +216,20 @@ class Controller
         } else {
             $this->posts();
         }
+    }
 
+    public function commentCreation()
+    {
+        $username = filter_input(INPUT_POST, 'user');
+        $comment = filter_input(INPUT_POST, 'comment');
+        $userId = filter_input(INPUT_POST, 'userId');
+        $postId = filter_input(INPUT_GET, 'id');
+
+        if (isset($username) && isset($comment) && isset($postId)) {
+            $create = $this->commentManager->createComment($username, $comment, $postId, $userId);
+            $message = $create ? 'Commentaire crée avec succès!' :  "Une erreur s'est produite";
+            $this->post($message);
+        }
     }
 
     public function contact()
@@ -228,7 +245,7 @@ class Controller
 
         if (!empty($firstname || $lastname || $email || $message)) {
             if (empty($lastname)) {
-                $errors[] = 'Lastname is empty'; 
+                $errors[] = 'Lastname is empty';
             }
 
             if (empty($firstname)) {
@@ -287,5 +304,4 @@ class Controller
     {
         require('view/errorView.php');
     }
-
 }

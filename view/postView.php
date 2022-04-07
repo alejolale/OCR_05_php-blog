@@ -21,6 +21,11 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
+            <?php if (isset($message)) : ?>
+                <div class="alert alert-warning" role="alert">
+                    <?php echo($message); ?>
+                </div>
+            <?php endif; ?>
             <div class="flex mb-4">
                 <?php if ($hasSession && $isVisible) : ?>
                     <form method="post" action=<?php echo $action . $post->id(); ?> >
@@ -72,16 +77,10 @@
                     </div>
                 <?php endif; ?>
             </div>
-                <?php if (!$edit) : ?>
-                    <h2 class="py-5">Créer un nouveau commentaire</h2>
-                    <form method="post" action="/?action=posts" class="pb-5">
-                        <div class="mb-3">
-                            <label for="comment" class="form-label">Commentaire :</label>
-                            <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Creer</button>
-                    </form>
-                <?php endif; ?>
+            <?php include_once 'commentForm.php'?>
+            <?php include_once 'validateComments.php'?>
+            <?php include_once 'comments.php'?>
+
         </div>
 
         <!-- Modal -->

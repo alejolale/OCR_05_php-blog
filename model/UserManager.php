@@ -29,12 +29,12 @@ class UserManager extends Manager
         return $users;
     }
 
-    public function getUser($id)
+    public function getUser($userId): User
     {
-        $id = (int) $id;
-
+        $userId = (int)$userId;
         $req = $this->db->prepare('SELECT id, firstname, lastname, email FROM user WHERE id = ?');
-        $req->execute(array($id));
+        $req->execute(array($userId));
+        $req->setFetchMode(\PDO::FETCH_ASSOC);
         $data = $req->fetch();
 
         return new User($data);
