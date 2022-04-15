@@ -61,6 +61,14 @@ try {
             $testController->commentCreation();
         }
 
+        if ($_GET['action'] === 'commentConfirmation') {
+            $testController->commentConfirmation();
+        }
+
+        if ($_GET['action'] === 'deleteComment') {
+            $testController->commentDelete();
+        }
+
         if ($_GET['action'] === 'users') {
             $testController->users();
         }

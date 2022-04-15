@@ -107,6 +107,7 @@ class Controller
             $userId = Session::get('USER_ID');
             $post = $this->publicationManager->getPublication($id);
             $user = $userId ? $this->userManager->getUser($userId) : null;
+            $disableComments = $this->commentManager->getDisabledComments($post->id());
             $action =  $edit ? '?action=post&id=' : '?action=postEdition&id=';
             $isVisible = $post->userId() === $userId;
 
@@ -230,6 +231,33 @@ class Controller
             $message = $create ? 'Commentaire crée avec succès!' :  "Une erreur s'est produite";
             $this->post($message);
         }
+    }
+
+    public function commentConfirmation()
+    {
+        $commentId = filter_input(INPUT_GET, 'commentId');
+
+        if (isset($commentId)) {
+            $this->commentManager->updateComment($commentId);
+            $message = "Commentaire validé!";
+        } else {
+            $message = "Erreur dans la validation du commentaire";
+        }
+        $this->post($message);
+    }
+
+    public function commentDelete()
+    {
+        $hasSession = Session::get('LOGGED_USER');
+        $commentId = filter_input(INPUT_GET, 'commentId');
+
+        if (isset($commentId) && isset($hasSession)) {
+            $this->commentManager->deleteComment($commentId);
+            $message = "Commentaire supprimé avec succès!";
+        } else {
+            $message = "Une erreur s'est produit, veuillez re-essayer!";
+        }
+        $this->post($message);
     }
 
     public function contact()

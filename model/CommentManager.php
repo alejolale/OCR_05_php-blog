@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace CommentManager;
 
 use Manager\Manager;
+use Commentary\Commentary;
+
+require_once('Manager.php');
+require_once ('Commentary.php');
 
 class CommentManager extends Manager
 {
@@ -37,6 +41,29 @@ class CommentManager extends Manager
         }
     }
 
+    public function getDisabledComments($publicationId)
+    {
+        $commentaries = [];
+        $req = $this->db->prepare('SELECT id, enabled, user_name, content, created_at, user_id, publication_id FROM commentary WHERE publication_id = ? && enabled = 0');
+        $req->execute(array($publicationId));
+        $req->setFetchMode(\PDO::FETCH_ASSOC);
+        $data = $req->fetchAll();
+
+        foreach ($data as $commentary) {
+            $commentaries[] = new Commentary($commentary);
+        }
+
+        return $commentaries;
+    }
+
+    public function deleteComment($commentId)
+    {
+        $req = $this->db->prepare('DELETE FROM commentary WHERE id= :id');
+        $req->execute(array(
+            'id' => $commentId,
+        ));
+    }
+
     public function getComments($publication_id)
     {
         $req = $this->db->prepare('SELECT enabled, user_name, content, created_at, user_id FROM commentary WHERE publication_id = ?');
@@ -44,14 +71,13 @@ class CommentManager extends Manager
         return $req;
     }
 
-    public function updateComment($publication_id, $enabled, $user_name, $content)
+    public function updateComment($publicationId)
     {
-        $req = $this->db->prepare('UPDATE commentary SET enabled= :enabled, user_name= :user_name, content= :content WHERE publication_id= :publication_id');
+        $enabled = 1;
+        $req = $this->db->prepare('UPDATE commentary SET enabled= :enabled WHERE id= :publication_id');
         $req->execute(array(
             'enabled' => $enabled,
-            'user_name' => $user_name,
-            'content' => $content,
-            'publication_id' => $publication_id,
+            'publication_id' => $publicationId,
         ));
     }
 }

@@ -78,7 +78,12 @@
                 <?php endif; ?>
             </div>
             <?php include_once 'commentForm.php'?>
-            <?php include_once 'validateComments.php'?>
+
+            <!-- TODO only admin who has created the post or superAdmin -->
+            <?php if ($hasSession && count($disableComments) > 0) : ?>
+                <?php include_once 'validateComments.php'?>
+            <?php endif; ?>
+
             <?php include_once 'comments.php'?>
 
         </div>
