@@ -107,6 +107,7 @@ class Controller
             $userId = Session::get('USER_ID');
             $post = $this->publicationManager->getPublication($id);
             $user = $userId ? $this->userManager->getUser($userId) : null;
+            $comments = $this->commentManager->getComments($post->id());
             $disableComments = $this->commentManager->getDisabledComments($post->id());
             $action =  $edit ? '?action=post&id=' : '?action=postEdition&id=';
             $isVisible = $post->userId() === $userId;

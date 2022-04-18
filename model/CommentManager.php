@@ -8,7 +8,7 @@ use Manager\Manager;
 use Commentary\Commentary;
 
 require_once('Manager.php');
-require_once ('Commentary.php');
+require_once('Commentary.php');
 
 class CommentManager extends Manager
 {
@@ -41,7 +41,7 @@ class CommentManager extends Manager
         }
     }
 
-    public function getDisabledComments($publicationId)
+    public function getDisabledComments($publicationId): array
     {
         $commentaries = [];
         $req = $this->db->prepare('SELECT id, enabled, user_name, content, created_at, user_id, publication_id FROM commentary WHERE publication_id = ? && enabled = 0');
@@ -64,11 +64,19 @@ class CommentManager extends Manager
         ));
     }
 
-    public function getComments($publication_id)
+    public function getComments($publicationId): array
     {
-        $req = $this->db->prepare('SELECT enabled, user_name, content, created_at, user_id FROM commentary WHERE publication_id = ?');
-        $req->execute(array($publication_id));
-        return $req;
+        $commentaries = [];
+        $req = $this->db->prepare('SELECT id, enabled, user_name, content, created_at, user_id, publication_id FROM commentary WHERE publication_id = ? && enabled = 1');
+        $req->execute(array($publicationId));
+        $req->setFetchMode(\PDO::FETCH_ASSOC);
+        $data = $req->fetchAll();
+
+        foreach ($data as $commentary) {
+            $commentaries[] = new Commentary($commentary);
+        }
+
+        return $commentaries;
     }
 
     public function updateComment($publicationId)

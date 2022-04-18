@@ -42,7 +42,7 @@
                 <!--TODO  edit delete avec un utilisateur admin-->
                 <?php if ($edit) : ?>
                     <h2 class="py-5">Edition du post</h2>
-                    <form method="post" action=<?php echo '/?action=postUpdate&id='.$post->id() ?> class="pb-5">
+                    <form method="post" action=<?php echo '/?action=postUpdate&id=' . $post->id() ?> class="pb-5">
                         <div class="mb-3">
                             <label for="title" class="form-label">Titre du post :</label>
                             <input value="<?= $post->title() ?>" type="text" class="form-control" id="title" name="title" placeholder="Titre.." required>
@@ -84,7 +84,10 @@
                 <?php include_once 'validateComments.php'?>
             <?php endif; ?>
 
-            <?php include_once 'comments.php'?>
+            <?php if ($hasSession && count($comments) > 0) : ?>
+                <?php include_once 'comments.php'?>
+            <?php endif; ?>
+
 
         </div>
 
@@ -102,7 +105,7 @@
                         Valider la suppresion du post ?
                     </div>
                     <div class="modal-footer">
-                        <form method="post" action=<?php echo '/?action=deletePost&id='.$post->id() ?> >
+                        <form method="post" action=<?php echo '/?action=deletePost&id=' . $post->id() ?> >
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
                             <button type="submit" class="deletebtn btn btn-danger">Supprimer</button>
                         </form>
