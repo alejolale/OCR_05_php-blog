@@ -27,6 +27,5 @@
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-
 </html>
 

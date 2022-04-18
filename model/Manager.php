@@ -1,26 +1,31 @@
 <?php
-abstract class Manager {
+
+declare(strict_types=1);
+
+namespace Manager;
+
+abstract class Manager
+{
     protected static $dbConnect;
     protected $db;
 
-    function __construct() {
+    function __construct()
+    {
         $this->db = $this->dbConnect();
     }
 
 
-    protected function dbConnect() {
-        if (self::$dbConnect){
+    protected function dbConnect()
+    {
+        if (self::$dbConnect) {
             return self::$dbConnect;
         }
 
-        try
-        {
-            self::$dbConnect = new PDO('mysql:host=localhost;dbname=blog_ocr;charset=utf8', 'sergio', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        try {
+            self::$dbConnect = new \PDO('mysql:host=localhost;dbname=blog_ocr;charset=utf8', 'sergio', 'xsgh8837', array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
             return self::$dbConnect;
-        }
-        catch (Exception $e)
-        {
-            die('Database connect Erreur: ' . $e->getMessage());
+        } catch (Exception $e) {
+            throw new Exception("Erreur de connexion à la base de données");
         }
     }
 }
