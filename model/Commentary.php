@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Commentary;
 
 class Commentary
@@ -111,10 +110,6 @@ class Commentary
 
     public function setUser_id(?string $userId)
     {
-        if ($userId) {
-            $this->_user_id = $userId;
-        } else {
-            $this->_user_id = null;
-        }
+        $this->_user_id = $userId ? $userId : null;
     }
 }

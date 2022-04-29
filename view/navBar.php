@@ -11,9 +11,9 @@
                 <li class="nav-item"><a class="nav-link" href=<?php echo '/?action=posts' ?>>Posts</a></li>
                 <li class="nav-item"><a class="nav-link" href="contact.html#contact">Contact</a></li>
                 <!--TODO add logout on auth user-->
-                <?php if(isset($_SESSION['LOGGED_USER'])): ?>
+                <?php if (isset($_SESSION['LOGGED_USER'])) : ?>
                     <li class="nav-item"><a class="nav-link" href=<?php echo '/?action=logout' ?>>Déconnexion</a></li>
-                <?php else: ?>
+                <?php else : ?>
                 <li class="nav-item"><a class="nav-link" href=<?php echo '/?action=login' ?>>Se connecter</a></li>
                 <?php endif; ?>
             </ul>

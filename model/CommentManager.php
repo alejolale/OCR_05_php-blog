@@ -31,11 +31,7 @@ class CommentManager extends Manager
 
             $data = $req->fetch();
 
-            if (isset($data)) {
-                return true;
-            } else {
-                return false;
-            }
+            return isset($data);
         } catch (\Exception) {
             return false;
         }
