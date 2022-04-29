@@ -60,8 +60,6 @@ class PublicationManager extends Manager
 
         if ($data) {
             return new Publication($data);
-        } else {
-            return false;
         }
     }
 

@@ -152,6 +152,8 @@ class Controller
 
         if (isset($id)) {
             $post = $this->publicationManager->getPublication($id);
+            $comments = $this->commentManager->getComments($post->id());
+            $disableComments = $this->commentManager->getDisabledComments($post->id());
             $userId = Session::get('USER_ID');
             $isVisible = $post->userId() === $userId;
             $action =  $edit ? '?action=post&id=' : '?action=postEdition&id=';
@@ -300,7 +302,9 @@ class Controller
                 $bodyParagraphs = ["Nom: {$lastname}", "Prénom: {$firstname}", "Email: {$email}", "Message:", $message];
                 $body = join(PHP_EOL, $bodyParagraphs);
 
+                //TODO verify functionality
                 $sendEmail = mail($toEmail, $emailSubject, $body, $headers);
+
                 if ($sendEmail) {
                     $responseMessage = 'Données envoyées';
                 } else {

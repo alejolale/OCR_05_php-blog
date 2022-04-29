@@ -102,11 +102,7 @@ class Publication
 
     public function setEdited_at(?string $editedAt)
     {
-        if ($editedAt) {
-            $this->_edited_at = $editedAt;
-        } else {
-            $this->_edited_at = null;
-        }
+            $this->_edited_at =$editedAt ?: null;
     }
 
     public function setHeader(string $header)

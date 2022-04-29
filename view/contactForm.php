@@ -1,4 +1,4 @@
-<div class="container">
+<div id="contact" class="container">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
             <div class="section-heading">Toujours disponible à vous écouter ☕</div>

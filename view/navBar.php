@@ -8,9 +8,8 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
-                <li class="nav-item"><a class="nav-link" href="about.html">A propos</a></li>
                 <li class="nav-item"><a class="nav-link" href=<?php echo '/?action=posts' ?>>Posts</a></li>
-                <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html#contact">Contact</a></li>
                 <!--TODO add logout on auth user-->
                 <?php if(isset($_SESSION['LOGGED_USER'])): ?>
                     <li class="nav-item"><a class="nav-link" href=<?php echo '/?action=logout' ?>>Déconnexion</a></li>

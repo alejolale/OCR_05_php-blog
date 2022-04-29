@@ -84,7 +84,7 @@
                 <?php include_once 'validateComments.php'?>
             <?php endif; ?>
 
-            <?php if ($hasSession && count($comments) > 0) : ?>
+            <?php if (count($comments) > 0) : ?>
                 <?php include_once 'comments.php'?>
             <?php endif; ?>
 
