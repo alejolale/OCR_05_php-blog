@@ -1,4 +1,5 @@
-<h1>Tous led admins peuvent valider un commentaire ou juste celui qui a crée le post?</h1>
+<h3 class="py-5">Validation des commentaires</h3>
+<br>
 <table class="table">
   <thead class="thead-dark">
     <tr>

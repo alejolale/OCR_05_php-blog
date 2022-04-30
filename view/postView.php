@@ -27,7 +27,7 @@
                 </div>
             <?php endif; ?>
             <div class="flex mb-4">
-                <?php if ($hasSession && $isVisible) : ?>
+                <?php if ($hasSession && $isCreator) : ?>
                     <form method="post" action=<?php echo $action . $post->id(); ?> >
 
                         <button type="submit" class="btn btn-primary" value="edit" name=<?= $edit ? "" : "edit" ?>>
@@ -60,7 +60,7 @@
                 <?php else : ?>
                     <div class="post-preview">
                         <h3 class="post-subtitle"><?= htmlspecialchars($post->header()) ?></h3>
-                        <p><?= htmlspecialchars($post->content()) ?></p>
+                        <p><?= nl2br(htmlspecialchars($post->content())) ?></p>
                         <p class="post-meta">
                             Rédigé par :
                             <?= htmlspecialchars($post->fullname()) ?>
@@ -80,12 +80,14 @@
             <?php include_once 'commentForm.php'?>
 
             <!-- TODO only admin who has created the post or superAdmin -->
-            <?php if ($hasSession && count($disableComments) > 0) : ?>
+            <?php if ($displayValidation) : ?>
                 <?php include_once 'validateComments.php'?>
             <?php endif; ?>
 
             <?php if (count($comments) > 0) : ?>
-                <?php include_once 'comments.php'?>
+                <div class="py-5">
+                    <?php include_once 'comments.php'?>
+                </div>
             <?php endif; ?>
 
 

@@ -1,5 +1,5 @@
 <?php if (!$edit) : ?>
-    <h2 class="py-5">Créer un nouveau commentaire</h2>
+    <h3 class="py-5">Créer un nouveau commentaire</h3>
     <form method="post" action=<?php echo '/?action=commentCreation&id=' . $post->id() ?> class="pb-5">
         <div class="mb-3">
             <label for="user" class="form-label">username :</label>

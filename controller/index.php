@@ -106,18 +106,21 @@ class Controller
         if (isset($id)) {
             $userId = Session::get('USER_ID');
             $post = $this->publicationManager->getPublication($id);
+
+            if ($post === null) {
+                $message = "La publication n'existe pas";
+                $this->myPosts($message);
+            }
+
+            $isCreator = $userId === $post->userId();
             $user = $userId ? $this->userManager->getUser($userId) : null;
             $comments = $this->commentManager->getComments($post->id());
             $disableComments = $this->commentManager->getDisabledComments($post->id());
             $action =  $edit ? '?action=post&id=' : '?action=postEdition&id=';
-            $isVisible = $post->userId() === $userId;
 
-            if ($post) {
-                require('view/postView.php');
-            } else {
-                $message = "La publication n'existe pas";
-                $this->myPosts($message);
-            }
+            $displayValidation = $hasSession && $isCreator && count($disableComments) > 0;
+
+            require('view/postView.php');
         }
     }
 
@@ -231,7 +234,7 @@ class Controller
 
         if (isset($username) && isset($comment) && isset($postId)) {
             $create = $this->commentManager->createComment($username, $comment, $postId, $userId);
-            $message = $create ? 'Commentaire crée avec succès!' :  "Une erreur s'est produite";
+            $message = $create ? 'Commentaire crée avec succès! en attente de validation...' :  "Une erreur s'est produite";
             $this->post($message);
         }
     }
