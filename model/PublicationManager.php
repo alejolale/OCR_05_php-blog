@@ -58,11 +58,7 @@ class PublicationManager extends Manager
         $req->setFetchMode(\PDO::FETCH_ASSOC);
         $data = $req->fetch();
 
-        if ($data) {
-            return new Publication($data);
-        } else {
-            return false;
-        }
+        return $data ? new Publication($data) : null;
     }
 
     public function createPublication($userId, $title, $header, $content)

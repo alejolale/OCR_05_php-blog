@@ -27,5 +27,22 @@
     <!-- Core theme JS-->
     <script src="js/scripts.js"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script type="text/javascript">
+        $(".trash").click(function () {
+            const id = $(this).data('id');
+            const postId = $(this).attr('data-postId');
+
+            $('#comentaryForm').attr('action','/?action=deleteComment&id='+postId+'&commentId='+id);
+        });
+        $(".approve").click(function () {
+            const id = $(this).data('id');
+            const postId = $(this).attr('data-postId');
+
+            $('#exampleModalLabel').text('Confirmation de commentaire');
+            $('#exampleModalcontent').text('Valider le commentaire ?');
+            $('#comentaryForm').attr('action','/?action=commentConfirmation&id='+postId+'&commentId='+id);
+            $('.deletebtn').text('Confirmer').attr('class','btn btn-primary');
+        });
+    </script>
 </html>
 

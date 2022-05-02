@@ -21,8 +21,13 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
+            <?php if (isset($message)) : ?>
+                <div class="alert alert-warning" role="alert">
+                    <?php echo($message); ?>
+                </div>
+            <?php endif; ?>
             <div class="flex mb-4">
-                <?php if ($hasSession && $isVisible) : ?>
+                <?php if ($hasSession && $isCreator) : ?>
                     <form method="post" action=<?php echo $action . $post->id(); ?> >
 
                         <button type="submit" class="btn btn-primary" value="edit" name=<?= $edit ? "" : "edit" ?>>
@@ -37,7 +42,7 @@
                 <!--TODO  edit delete avec un utilisateur admin-->
                 <?php if ($edit) : ?>
                     <h2 class="py-5">Edition du post</h2>
-                    <form method="post" action=<?php echo '/?action=postUpdate&id='.$post->id() ?> class="pb-5">
+                    <form method="post" action=<?php echo '/?action=postUpdate&id=' . $post->id() ?> class="pb-5">
                         <div class="mb-3">
                             <label for="title" class="form-label">Titre du post :</label>
                             <input value="<?= $post->title() ?>" type="text" class="form-control" id="title" name="title" placeholder="Titre.." required>
@@ -55,7 +60,7 @@
                 <?php else : ?>
                     <div class="post-preview">
                         <h3 class="post-subtitle"><?= htmlspecialchars($post->header()) ?></h3>
-                        <p><?= htmlspecialchars($post->content()) ?></p>
+                        <p><?= nl2br(htmlspecialchars($post->content())) ?></p>
                         <p class="post-meta">
                             Rédigé par :
                             <?= htmlspecialchars($post->fullname()) ?>
@@ -72,16 +77,20 @@
                     </div>
                 <?php endif; ?>
             </div>
-                <?php if (!$edit) : ?>
-                    <h2 class="py-5">Créer un nouveau commentaire</h2>
-                    <form method="post" action="/?action=posts" class="pb-5">
-                        <div class="mb-3">
-                            <label for="comment" class="form-label">Commentaire :</label>
-                            <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Creer</button>
-                    </form>
-                <?php endif; ?>
+            <?php include_once 'commentForm.php'?>
+
+            <!-- TODO only admin who has created the post or superAdmin -->
+            <?php if ($displayValidation) : ?>
+                <?php include_once 'validateComments.php'?>
+            <?php endif; ?>
+
+            <?php if (count($comments) > 0) : ?>
+                <div class="py-5">
+                    <?php include_once 'comments.php'?>
+                </div>
+            <?php endif; ?>
+
+
         </div>
 
         <!-- Modal -->
@@ -98,7 +107,7 @@
                         Valider la suppresion du post ?
                     </div>
                     <div class="modal-footer">
-                        <form method="post" action=<?php echo '/?action=deletePost&id='.$post->id() ?> >
+                        <form method="post" action=<?php echo '/?action=deletePost&id=' . $post->id() ?> >
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
                             <button type="submit" class="deletebtn btn btn-danger">Supprimer</button>
                         </form>

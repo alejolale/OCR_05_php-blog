@@ -5,9 +5,11 @@ namespace Controller;
 use Session\Session;
 use UserManager\UserManager;
 use PublicationManager\PublicationManager;
+use CommentManager\CommentManager;
 
 require_once 'model/UserManager.php';
 require_once 'model/PublicationManager.php';
+require_once 'model/CommentManager.php';
 require_once 'controller/Session.php';
 
 class Controller
@@ -19,6 +21,7 @@ class Controller
     {
         $this->userManager = new UserManager();
         $this->publicationManager = new PublicationManager();
+        $this->commentManager = new CommentManager();
     }
 
     public function index()
@@ -53,7 +56,6 @@ class Controller
                 $message = "Le nom d'utilisateur ou le mot de passe est incorrect.";
                 require('view/loginView.php');
             }
-
         } else {
             require('view/loginView.php');
         }
@@ -94,24 +96,31 @@ class Controller
         require('view/postsView.php');
     }
 
-    public function post()
+    public function post($message = null)
     {
         $hasSession = Session::get('LOGGED_USER');
         $id = filter_input(INPUT_GET, 'id');
         $edit = filter_input(INPUT_POST, 'edit');
+        $message;
 
         if (isset($id)) {
-            $post = $this->publicationManager->getPublication($id);
             $userId = Session::get('USER_ID');
-            $action =  $edit ? '?action=post&id=' : '?action=postEdition&id=';
-            $isVisible = $post->userId() === $userId;
+            $post = $this->publicationManager->getPublication($id);
 
-            if ($post) {
-                require('view/postView.php');
-            } else {
+            if ($post === null) {
                 $message = "La publication n'existe pas";
                 $this->myPosts($message);
             }
+
+            $isCreator = $userId === $post->userId();
+            $user = $userId ? $this->userManager->getUser($userId) : null;
+            $comments = $this->commentManager->getComments($post->id());
+            $disableComments = $this->commentManager->getDisabledComments($post->id());
+            $action =  $edit ? '?action=post&id=' : '?action=postEdition&id=';
+
+            $displayValidation = $hasSession && $isCreator && count($disableComments) > 0;
+
+            require('view/postView.php');
         }
     }
 
@@ -135,7 +144,6 @@ class Controller
                 $message = "Erreur dans la création du post, veuillez reessayer";
                 require('view/postsView.php');
             }
-
         }
     }
 
@@ -147,6 +155,8 @@ class Controller
 
         if (isset($id)) {
             $post = $this->publicationManager->getPublication($id);
+            $comments = $this->commentManager->getComments($post->id());
+            $disableComments = $this->commentManager->getDisabledComments($post->id());
             $userId = Session::get('USER_ID');
             $isVisible = $post->userId() === $userId;
             $action =  $edit ? '?action=post&id=' : '?action=postEdition&id=';
@@ -179,7 +189,8 @@ class Controller
         }
     }
 
-    public function postDelete() {
+    public function postDelete()
+    {
         $hasSession = Session::get('LOGGED_USER');
         $userId = Session::get('USER_ID');
         $postId = filter_input(INPUT_GET, 'id');
@@ -212,7 +223,47 @@ class Controller
         } else {
             $this->posts();
         }
+    }
 
+    public function commentCreation()
+    {
+        $username = filter_input(INPUT_POST, 'user');
+        $comment = filter_input(INPUT_POST, 'comment');
+        $userId = filter_input(INPUT_POST, 'userId');
+        $postId = filter_input(INPUT_GET, 'id');
+
+        if (isset($username) && isset($comment) && isset($postId)) {
+            $create = $this->commentManager->createComment($username, $comment, $postId, $userId);
+            $message = $create ? 'Commentaire crée avec succès! en attente de validation...' :  "Une erreur s'est produite";
+            $this->post($message);
+        }
+    }
+
+    public function commentConfirmation()
+    {
+        $commentId = filter_input(INPUT_GET, 'commentId');
+
+        if (isset($commentId)) {
+            $this->commentManager->updateComment($commentId);
+            $message = "Commentaire validé!";
+        } else {
+            $message = "Erreur dans la validation du commentaire";
+        }
+        $this->post($message);
+    }
+
+    public function commentDelete()
+    {
+        $hasSession = Session::get('LOGGED_USER');
+        $commentId = filter_input(INPUT_GET, 'commentId');
+
+        if (isset($commentId) && isset($hasSession)) {
+            $this->commentManager->deleteComment($commentId);
+            $message = "Commentaire supprimé avec succès!";
+        } else {
+            $message = "Une erreur s'est produit, veuillez re-essayer!";
+        }
+        $this->post($message);
     }
 
     public function contact()
@@ -228,7 +279,7 @@ class Controller
 
         if (!empty($firstname || $lastname || $email || $message)) {
             if (empty($lastname)) {
-                $errors[] = 'Lastname is empty'; 
+                $errors[] = 'Lastname is empty';
             }
 
             if (empty($firstname)) {
@@ -254,7 +305,9 @@ class Controller
                 $bodyParagraphs = ["Nom: {$lastname}", "Prénom: {$firstname}", "Email: {$email}", "Message:", $message];
                 $body = join(PHP_EOL, $bodyParagraphs);
 
+                //TODO verify functionality
                 $sendEmail = mail($toEmail, $emailSubject, $body, $headers);
+
                 if ($sendEmail) {
                     $responseMessage = 'Données envoyées';
                 } else {
@@ -287,5 +340,4 @@ class Controller
     {
         require('view/errorView.php');
     }
-
 }
