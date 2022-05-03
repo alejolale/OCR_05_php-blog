@@ -77,14 +77,17 @@ class Controller
 
         if (isset($firstname) && isset($lastname) && isset($email) && isset($password) && isset($passwordConfirmation)) {
             if ($password === $passwordConfirmation) {
-                $this->userManager->createUser($firstname, $lastname, $email, password_hash($password, PASSWORD_DEFAULT));
-                Session::put('LOGGED_USER', $email);
+                $req = $this->userManager->createUser($firstname, $lastname, $email, password_hash($password, PASSWORD_DEFAULT));
+                if ($req === null) {
+                    $message = 'Error, email existant!';
+                } else {
+                    $message = "Compte crée avec succès!, veuillez vous connecter!";
+                }
             } else {
                 $validationError = true;
                 $message = "La validation du mot de passe est incorrect.";
             }
         }
-
         require('view/signupView.php');
     }
 
