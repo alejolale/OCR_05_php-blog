@@ -14,8 +14,9 @@ require_once 'controller/Session.php';
 
 class Controller
 {
-    private $userManager;
-    private $publicationManager;
+    private UserManager $userManager;
+    private PublicationManager $publicationManager;
+    private CommentManager $commentManager;
 
     public function __construct()
     {
@@ -24,50 +25,50 @@ class Controller
         $this->commentManager = new CommentManager();
     }
 
-    public function index()
+    public function index(): void
     {
         $posts =  $this->publicationManager->getPublications(4);
         require('view/indexView.php');
     }
 
-    public function login()
+    public function login(): void
     {
         $email = filter_input(INPUT_POST, 'email');
         $password = filter_input(INPUT_POST, 'password');
+        $hasUser = false;
+        $firstname = '';
 
         if (isset($email) && isset($password)) {
-            //echo(password_hash($password, PASSWORD_DEFAULT));
-            //TODO verify unhash
-            //$user = $this->userManager->login($email, password_hash($password, PASSWORD_DEFAULT));
-            $user = $this->userManager->login($email, $password);
+            $user = $this->userManager->login($email);
+            $isValidPassword = password_verify($password, $user->password());
+            $hasUser = $isValidPassword;
 
-            if ($user) {
+            if ($isValidPassword) {
                 $email = $user->email();
                 $userId = $user->id();
-                /*echo('eyyy hre in login');
-                var_dump($email);*/
+                $userType = $user->type();
+                $firstname = $user->firstname();
+
                 Session::put('LOGGED_USER', $email);
                 Session::put('USER_ID', $userId);
-                //TODO afficher vue une fois logé -- page posts
-                $this->posts();
-                //require('view/postsView.php');
-                //header("Location: index.php");
+                Session::put('USER_TYPE', $userType);
             } else {
                 $message = "Le nom d'utilisateur ou le mot de passe est incorrect.";
-                require('view/loginView.php');
             }
-        } else {
-            require('view/loginView.php');
         }
+        if (Session::get('LOGGED_USER')) {
+            $message = "Vous êtes déjà connecté";
+        }
+        require('view/loginView.php');
     }
 
-    public function logout()
+    public function logout(): void
     {
         session_destroy();
         header('Location: index.php');
     }
 
-    public function signup()
+    public function signup(): void
     {
         $firstname = filter_input(INPUT_POST, 'firstname');
         $lastname = filter_input(INPUT_POST, 'lastname');
@@ -87,6 +88,9 @@ class Controller
                 $validationError = true;
                 $message = "La validation du mot de passe est incorrect.";
             }
+        }
+        if (Session::get('LOGGED_USER')) {
+            $message = "Vous êtes déjà connecté, vous pouvez créer un nouveau compte.";
         }
         require('view/signupView.php');
     }
@@ -192,7 +196,7 @@ class Controller
         }
     }
 
-    public function postDelete()
+    public function postDelete(): void
     {
         $hasSession = Session::get('LOGGED_USER');
         $userId = Session::get('USER_ID');
@@ -210,17 +214,12 @@ class Controller
         $this->myPosts($message);
     }
 
-    public function myPosts($message)
+    public function myPosts($message = null): void
     {
         $hasSession = Session::get('LOGGED_USER');
-        $message;
         $userId = Session::get('USER_ID');
         $posts = $this->publicationManager->getPublicationsByUserId($userId);
 
-        /*echo('<pre>');
-        print_r($posts);
-        echo('</pre>');*/
-        //var_dump($posts);
         if (isset($hasSession)) {
             require('view/myPostsView.php');
         } else {

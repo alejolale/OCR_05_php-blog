@@ -6,7 +6,7 @@ namespace Session;
 
 class Session
 {
-    public static function put($key, $value)
+    public static function put($key, $value): void
     {
         $_SESSION[$key] = $value;
     }
@@ -14,10 +14,5 @@ class Session
     public static function get($key)
     {
         return ($_SESSION[$key] ?? null);
-    }
-
-    public static function forget($key)
-    {
-        unset($_SESSION[$key]);
     }
 }
