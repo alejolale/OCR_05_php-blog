@@ -7,77 +7,77 @@ require 'controller/index.php';
 
 use Controller\Controller;
 
-$testController = new Controller();
+$controller = new Controller();
 
 try {
     $action = filter_input(INPUT_GET, 'contact');
 
     if (isset($_GET['action'])) {
         if ($_GET['action'] === 'contact') {
-            $testController->contact();
+            $controller->contact();
         }
 
         if ($_GET['action'] === 'login') {
-            $testController->login();
+            $controller->login();
         }
 
         if ($_GET['action'] === 'signup') {
-            $testController->signup();
+            $controller->signup();
         }
 
         if ($_GET['action'] === 'logout') {
-            $testController->logout();
+            $controller->logout();
         }
 
         if ($_GET['action'] === 'posts') {
-            $testController->posts();
+            $controller->posts();
         }
 
         if ($_GET['action'] === 'myPosts') {
-            $testController->myPosts();
+            $controller->myPosts();
         }
 
         if ($_GET['action'] === 'post') {
-            $testController->post();
+            $controller->post();
         }
 
         if ($_GET['action'] === 'postCreation') {
-            $testController->postCreation();
+            $controller->postCreation();
         }
 
         if ($_GET['action'] === 'postEdition') {
-            $testController->postEdition();
+            $controller->postEdition();
         }
 
         if ($_GET['action'] === 'postUpdate') {
-            $testController->postUpdate();
+            $controller->postUpdate();
         }
 
         if ($_GET['action'] === 'deletePost') {
-            $testController->postDelete();
+            $controller->postDelete();
         }
 
         if ($_GET['action'] === 'commentCreation') {
-            $testController->commentCreation();
+            $controller->commentCreation();
         }
 
         if ($_GET['action'] === 'commentConfirmation') {
-            $testController->commentConfirmation();
+            $controller->commentConfirmation();
         }
 
         if ($_GET['action'] === 'deleteComment') {
-            $testController->commentDelete();
+            $controller->commentDelete();
         }
 
         if ($_GET['action'] === 'users') {
-            $testController->users();
+            $controller->users();
         }
 
         if ($_GET['action'] === 'user') {
-            $testController->users();
+            $controller->users();
         }
     } else {
-        $testController->index();
+        $controller->index();
     }
 } catch (\Throwable) {
     //$testController->error();

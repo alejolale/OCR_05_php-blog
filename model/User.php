@@ -33,7 +33,6 @@ class User
             $method = 'set' . ucfirst($key);
 
             /*echo ('method :' . $method . $key . $value);
-
             echo('</br>');*/
 
             if (method_exists($this, $method)) {
@@ -131,7 +130,7 @@ class User
 
     public function setType($type)
     {
-        if (is_int($type)) {
+        if (is_string($type)) {
             $this->_type = $type;
         }
     }

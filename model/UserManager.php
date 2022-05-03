@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace UserManager;
 
 use Manager\Manager;
@@ -16,7 +14,7 @@ class UserManager extends Manager
     //TODO remove
     //print("<pre>".print_r($users,true)."</pre>");
 
-    public function getUsers()
+    public function getUsers(): array
     {
         $users = [];
 
@@ -40,52 +38,36 @@ class UserManager extends Manager
         return new User($data);
     }
 
-    public function login($email, $password)
+    public function login($email): ?User
     {
-        $req = $this->db->prepare('SELECT * FROM user WHERE email = :email AND password = :password');
+        $req = $this->db->prepare('SELECT * FROM user WHERE email = :email');
         $req->execute(array(
-            'email' => $email,
-            'password' => $password
+            'email' => $email
         ));
-        $result = $req->setFetchMode(\PDO::FETCH_ASSOC);
-        $data = $req->fetchAll( );
-
-        /*echo('<pre>');
-        print_r($data);
-        echo('</pre>');*/
+        $req->setFetchMode(\PDO::FETCH_ASSOC);
+        $data = $req->fetchAll();
 
         if ($data) {
-            $user = new User($data[0]);
-
-            /*echo('test');
-
-            echo('<pre>');
-            var_dump($user);
-            echo('</pre>');*/
-
-            return $user;
+            return new User($data[0]);
         }
-
-        //var_dump(isset($data['id']));
-        //print("<pre>".print_r($data,true)."</pre>");
-
-
-        //return null;
+        return null;
     }
 
-    public function createUser($firstname, $lastname, $email, $password)
+    public function createUser($firstname, $lastname, $email, $password): ?User
     {
         try {
-            $req = $this->db->prepare('INSERT INTO user (firstname, lastname, email, password) VALUES (:firstname, :lastname, :email, :password )');
+            $userType = 'user';
+            $req = $this->db->prepare('INSERT INTO user (firstname, lastname, email, password, type) VALUES (:firstname, :lastname, :email, :password, :type )');
             $req->execute(array(
                 'firstname' => $firstname,
                 'lastname' => $lastname,
                 'email' => $email,
                 'password' => $password,
+                'type' => $userType
             ));
             $data = $req->fetch();
             if (isset($data)) {
-                return $this->login($email, $password);
+                return $this->login($email);
             }
             return null;
         } catch (\Exception) {
