@@ -75,20 +75,22 @@ class UserManager extends Manager
 
     public function createUser($firstname, $lastname, $email, $password)
     {
-        $req = $this->db->prepare('INSERT INTO user (firstname, lastname, email, password) VALUES (:firstname, :lastname, :email, :password )');
-        $req->execute(array(
-            'firstname' => $firstname,
-            'lastname' => $lastname,
-            'email' => $email,
-            'password' => $password,
-        ));
-        $data = $req->fetch();
-
-        if (isset($data)) {
-            //var_dump('user', $user);
-            return $this->login($email, $password);
+        try {
+            $req = $this->db->prepare('INSERT INTO user (firstname, lastname, email, password) VALUES (:firstname, :lastname, :email, :password )');
+            $req->execute(array(
+                'firstname' => $firstname,
+                'lastname' => $lastname,
+                'email' => $email,
+                'password' => $password,
+            ));
+            $data = $req->fetch();
+            if (isset($data)) {
+                return $this->login($email, $password);
+            }
+            return null;
+        } catch (\Exception) {
+            return null;
         }
-        return null;
     }
 
     public function updateUser($id, $firstname, $lastname, $email)
