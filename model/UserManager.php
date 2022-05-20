@@ -84,6 +84,15 @@ class UserManager extends Manager
         ));
     }
 
+    public function userValidation($id)
+    {
+        $req = $this->db->prepare('UPDATE user SET confirmed= :confirmed WHERE id= :id');
+        $req->execute(array(
+            'confirmed' => 1,
+            'id' => $id,
+        ));
+    }
+
     public function updatePassword($id, $password)
     {
         $req = $this->db->prepare('UPDATE user SET password= :password WHERE id= :id');

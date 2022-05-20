@@ -39,7 +39,7 @@
                         </td>
                         <td><?= htmlspecialchars($user->lastname()) ?></td>
                         <td class="d-flex flex-row align-items-center">
-                            <?php if ($user->confirmed()) : ?>
+                            <?php if ($user->confirmed() === 0) : ?>
                             <button type="button" id="submit" data-id="<?= $user->id() ?>" class="btn btn-primary approve" value="confirm" data-toggle="modal" data-target="#exampleModal">
                                 Valider
                             </button>
@@ -60,16 +60,16 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Suppresion du post</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Validation</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                Valider la suppresion du post ?
+                Valider l'utilisateur ?
             </div>
             <div class="modal-footer">
-                <form method="post" action=<?php echo '/?action=deletePost&id=' . $user->id() ?> >
+                <form method="post" action=<?php echo '/?action=userValidation&id=' . $user->id() ?> >
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
                     <button type="submit" class="deletebtn btn btn-danger">Supprimer</button>
                 </form>

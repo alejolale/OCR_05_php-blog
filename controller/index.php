@@ -396,6 +396,21 @@ class Controller
         }
     }
 
+    public function userValidation(): void
+    {
+        $id = filter_input(INPUT_GET, 'id');
+
+        if (isset($id)) {
+            $this->userManager->userValidation($id);
+
+            $message = "Utilisateur validé avec succès !!";
+            require('view/userValidationView.php');
+        } else {
+            $message = "Une erreur s'est produit, veuillez re-essayer!";
+            require('view/userValidationView.php');
+        }
+    }
+
     public function error()
     {
         require('view/errorView.php');

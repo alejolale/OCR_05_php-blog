@@ -81,6 +81,10 @@ try {
             $controller->users();
         }
 
+        if ($_GET['action'] === 'userValidation') {
+            $controller->userValidation();
+        }
+
         if ($_GET['action'] === 'user') {
             $controller->users();
         }
