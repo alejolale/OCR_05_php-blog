@@ -16,7 +16,7 @@ class User
     private string $_password;
     private string $_avatar;
     private string $_type;
-    private string $_confirmed;
+    private int $_confirmed;
     private int $_enabled;
 
     public function __construct(array $data = array())
@@ -29,7 +29,6 @@ class User
     public function hydrate(array $data)
     {
         foreach ($data as $key => $value) {
-
             $method = 'set' . ucfirst($key);
 
             /*echo ('method :' . $method . $key . $value);
@@ -132,6 +131,13 @@ class User
     {
         if (is_string($type)) {
             $this->_type = $type;
+        }
+    }
+
+    public function setConfirmed($confirmed)
+    {
+        if (is_int($confirmed)) {
+            $this->_confirmed = $confirmed;
         }
     }
 

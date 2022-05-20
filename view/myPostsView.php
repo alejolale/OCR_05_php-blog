@@ -37,7 +37,9 @@
                             <h3 class="post-subtitle"><?= htmlspecialchars($post->header()) ?></h3>
                         </a>
                     </div>
-                    <hr />
+                    <?php if (next($posts)) :  ?>
+                        <hr />
+                    <?php endif; ?>
                 <?php } ?>
                 <?php endif; ?>
 

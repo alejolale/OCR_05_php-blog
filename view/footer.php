@@ -28,6 +28,10 @@
                                     </span>
                         </a>
                     </li>
+
+                    <?php if (isset($_SESSION['LOGGED_USER'])) : ?>
+                        <li class="nav-item"><a class="nav-link" href=<?php echo '/?action=account' ?>>Mon profil</a></li>
+                    <?php endif; ?>
                 </ul>
                 <p class="copyright text-muted">Copyright &copy; Sergio Prieto 2021</p>
             </div>

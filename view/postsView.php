@@ -10,6 +10,7 @@
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="site-heading">
                     <h1>Posts</h1>
+                    <a class="nav-link text-white underlined" href=<?php echo '/?action=myPosts' ?>><u>Consulter mes publications</u></a>
                 </div>
             </div>
         </div>
@@ -44,11 +45,7 @@
                     <button type="submit" class="btn btn-primary">Creer nouveau post</button>
                 </form>
             <?php endif; ?>
-
-            <!-- TODO create pagination-->
             <?php include_once 'posts.php' ?>
-            <!-- Pager-->
-            <div class="clearfix"><a class="btn btn-primary float-right" href="#!">TODO pagination →</a></div>
         </div>
     </div>
 </div>

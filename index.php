@@ -25,6 +25,14 @@ try {
             $controller->signup();
         }
 
+        if ($_GET['action'] === 'account') {
+            $controller->account();
+        }
+
+        if ($_GET['action'] === 'accountEdition') {
+            $controller->accountEdition();
+        }
+
         if ($_GET['action'] === 'logout') {
             $controller->logout();
         }

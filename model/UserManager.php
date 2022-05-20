@@ -11,17 +11,16 @@ require_once('model/User.php');
 
 class UserManager extends Manager
 {
-    //TODO remove
-    //print("<pre>".print_r($users,true)."</pre>");
-
     public function getUsers(): array
     {
         $users = [];
 
-        $req = $this->db->query('SELECT id, firstname, lastname, email FROM user');
+        $req = $this->db->query('SELECT id, firstname, lastname, email, confirmed FROM user ORDER BY confirmed DESC');
+        $req->setFetchMode(\PDO::FETCH_ASSOC);
+        $data = $req->fetchAll();
 
-        while ($data = $req->fetch()) {
-            $users[] = new User($data);
+        foreach ($data as $user) {
+            $users[] = new User($user);
         }
 
         return $users;
@@ -30,7 +29,7 @@ class UserManager extends Manager
     public function getUser($userId): User
     {
         $userId = (int)$userId;
-        $req = $this->db->prepare('SELECT id, firstname, lastname, email FROM user WHERE id = ?');
+        $req = $this->db->prepare('SELECT id, firstname, lastname, email, password FROM user WHERE id = ?');
         $req->execute(array($userId));
         $req->setFetchMode(\PDO::FETCH_ASSOC);
         $data = $req->fetch();
@@ -75,14 +74,22 @@ class UserManager extends Manager
         }
     }
 
-    public function updateUser($id, $firstname, $lastname, $email)
+    public function updateUser($id, $firstname, $lastname)
     {
-        $req = $this->db->prepare('UPDATE user SET firstname= :firstname, lastname= :lastname, email= :email WHERE id= :id');
+        $req = $this->db->prepare('UPDATE user SET firstname= :firstname, lastname= :lastname WHERE id= :id');
         $req->execute(array(
             'firstname' => $firstname,
             'lastname' => $lastname,
-            'email' => $email,
             'id' => $id,
+        ));
+    }
+
+    public function updatePassword($id, $password)
+    {
+        $req = $this->db->prepare('UPDATE user SET password= :password WHERE id= :id');
+        $req->execute(array(
+            'password' => $password,
+            'id' => $id
         ));
     }
 
@@ -93,22 +100,4 @@ class UserManager extends Manager
             'id' => $id
         ));
     }
-
-    public function updatePassword($id, $newPassword)
-    {
-        $req = $this->db->prepare('UPDATE user SET password= :newPassword WHERE id= :id');
-        $req->execute(array(
-            'password' => $newPassword,
-            'id' => $id
-        ));
-    }
-
-    public function verifyEmail($email)
-    {
-        $req = $this->db->prepare('SELECT email FROM user WHERE email= :email');
-        $req->execute(array(
-            'email' => $email
-        ));
-    }
-
 }
