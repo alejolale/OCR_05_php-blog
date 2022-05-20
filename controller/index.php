@@ -95,10 +95,69 @@ class Controller
         require('view/signupView.php');
     }
 
+    public function account(): void
+    {
+        $userId = Session::get('USER_ID');
+        $userType = Session::get('USER_TYPE');
+        if ($userId) {
+            $user = $this->userManager->getUser($userId);
+            $firstname = $user->firstname();
+            $lastname = $user->lastname();
+            require('view/accountView.php');
+        } else {
+            $this->index();
+        }
+    }
+
+    public function accountEdition(): void
+    {
+        $userId = Session::get('USER_ID');
+        $account = filter_input(INPUT_POST, 'account');
+        $passwordEdition = filter_input(INPUT_POST, 'passwordEdition');
+
+
+        if ($userId && $account) {
+            $firstname = filter_input(INPUT_POST, 'firstname');
+            $lastname = filter_input(INPUT_POST, 'lastname');
+            $this->userManager->updateUser($userId, $firstname, $lastname);
+
+            $message = 'Données modifiés avec succès !';
+            require('view/accountView.php');
+        } elseif ($userId && $passwordEdition) {
+            $user = $this->userManager->getUser($userId);
+            $firstname = $user->firstname();
+            $lastname = $user->lastname();
+            $currentPassword = $user->password();
+            $password = filter_input(INPUT_POST, 'password');
+            $newPassword = filter_input(INPUT_POST, 'new');
+            $newPasswordConfirmation = filter_input(INPUT_POST, 'confirmation');
+
+            $isValid = password_verify($password, $currentPassword) && $newPassword === $newPasswordConfirmation;
+
+            if ($isValid) {
+                $this->userManager->updatePassword($userId, password_hash($newPassword, PASSWORD_DEFAULT));
+                $message = 'Mot de passe modifié avec succès !';
+
+            } else {
+                $message = 'Veuillez reesayer !';
+            }
+            require('view/accountView.php');
+
+        } else {
+            $this->account();
+        }
+    }
+
     public function posts()
     {
         $hasSession = Session::get('LOGGED_USER');
+        $userId = Session::get('USER_ID');
+
         $posts =  $this->publicationManager->getPublications();
+        $myPosts = $this->publicationManager->getPublicationsByUserId($userId);
+        $hasUserPosts = count($myPosts) > 0;
+
+        //var_dump($hasUserPosts);
 
         require('view/postsView.php');
     }
@@ -323,9 +382,8 @@ class Controller
         require('view/contactFormAnswer.php');
     }
 
-    public function users()
+    public function users(): void
     {
-        $this->userManager = new UserManager();
         $users = $this->userManager->getUsers();
 
         $id = filter_input(INPUT_GET, 'id');
@@ -335,6 +393,21 @@ class Controller
             require('view/userView.php');
         } else {
             require('view/usersView.php');
+        }
+    }
+
+    public function userValidation(): void
+    {
+        $id = filter_input(INPUT_GET, 'id');
+
+        if (isset($id)) {
+            $this->userManager->userValidation($id);
+
+            $message = "Utilisateur validé avec succès !!";
+            require('view/userValidationView.php');
+        } else {
+            $message = "Une erreur s'est produit, veuillez re-essayer!";
+            require('view/userValidationView.php');
         }
     }
 

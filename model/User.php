@@ -14,10 +14,8 @@ class User
     private string $_lastname;
     private string $_email;
     private string $_password;
-    private string $_avatar;
     private string $_type;
-    private string $_confirmed;
-    private int $_enabled;
+    private int $_confirmed;
 
     public function __construct(array $data = array())
     {
@@ -29,11 +27,7 @@ class User
     public function hydrate(array $data)
     {
         foreach ($data as $key => $value) {
-
             $method = 'set' . ucfirst($key);
-
-            /*echo ('method :' . $method . $key . $value);
-            echo('</br>');*/
 
             if (method_exists($this, $method)) {
                 // call setter
@@ -66,11 +60,6 @@ class User
         return $this->_password;
     }
 
-    public function avatar()
-    {
-        return $this->_avatar;
-    }
-
     public function type()
     {
         return $this->_type;
@@ -79,11 +68,6 @@ class User
     public function confirmed()
     {
         return $this->_confirmed;
-    }
-
-    public function enabled()
-    {
-        return $this->_enabled;
     }
 
     public function setId($id)
@@ -121,13 +105,6 @@ class User
         }
     }
 
-    public function setAvatar($avatar)
-    {
-        if (is_string($avatar)) {
-            $this->_avatar = $avatar;
-        }
-    }
-
     public function setType($type)
     {
         if (is_string($type)) {
@@ -135,10 +112,10 @@ class User
         }
     }
 
-    public function setEnabled($enabled)
+    public function setConfirmed($confirmed)
     {
-        if (is_int($enabled)) {
-            $this->_enabled = $enabled;
+        if (is_int($confirmed)) {
+            $this->_confirmed = $confirmed;
         }
     }
 }

@@ -13,7 +13,9 @@
                     le <?= htmlspecialchars(date('d-m,  Y', strtotime($post->createdAt()))) ?>
                 </p>
             </div>
-            <hr />
+            <?php if (next($posts)) :  ?>
+                <hr />
+            <?php endif; ?>
         <?php } ?>
  <?php endif; ?>
 
