@@ -2,6 +2,8 @@
 
 namespace Controller;
 
+use Mailjet\Client;
+use Mailjet\Resources;
 use Session\Session;
 use UserManager\UserManager;
 use PublicationManager\PublicationManager;
@@ -11,6 +13,7 @@ require_once 'model/UserManager.php';
 require_once 'model/PublicationManager.php';
 require_once 'model/CommentManager.php';
 require_once 'controller/Session.php';
+require 'vendor/autoload.php';
 
 class Controller
 {
@@ -137,12 +140,10 @@ class Controller
             if ($isValid) {
                 $this->userManager->updatePassword($userId, password_hash($newPassword, PASSWORD_DEFAULT));
                 $message = 'Mot de passe modifié avec succès !';
-
             } else {
                 $message = 'Veuillez reesayer !';
             }
             require('view/accountView.php');
-
         } else {
             $this->account();
         }
@@ -326,7 +327,6 @@ class Controller
 
     public function contact()
     {
-        //TODO verify email sending
         $errors = [];
         $responseMessage = '';
 
@@ -355,18 +355,60 @@ class Controller
             }
 
             if (empty($errors)) {
-                $responseMessage =  'eooo';
-                $toEmail = 'sergio.prieto01@outlook.com';
+                $responseMessage =  '-';
+                $toEmail = 'sergio@yieldstudio.fr';
                 $emailSubject = 'New email from your contant form';
-                $headers = ['From' => $email, 'Reply-To' => $email, 'Content-type' => 'text/html; charset=iso-8859-1'];
 
-                $bodyParagraphs = ["Nom: {$lastname}", "Prénom: {$firstname}", "Email: {$email}", "Message:", $message];
-                $body = join(PHP_EOL, $bodyParagraphs);
+                $clientMessage = new Client('5e12f661454a2a6560005369c577f777', '23a96750389fb13b739362f54817de9f', true, ['version' => 'v3.1']);
 
-                //TODO verify functionality
-                $sendEmail = mail($toEmail, $emailSubject, $body, $headers);
+                // Email to admin
+                $body = [
+                    'Messages' => [
+                        [
+                            'From' => [
+                                'Email' => "sergio.prieto01@outlook.com",
+                                'Name' => "Me"
+                            ],
+                            'To' => [
+                                [
+                                    'Email' => $toEmail,
+                                    'Name' => "You"
+                                ]
+                            ],
+                            'Subject' => "Blog || contact",
+                            'TextPart' => "Greetings from Mailjet!",
+                            'HTMLPart' => "<h3>Nouveau message de $firstname $lastname!</h3>
+                                <br /><h4>Email : </h4>$email
+                                <br /><h4>Message : </h4>$message"
+                        ]
+                    ]
+                ];
 
-                if ($sendEmail) {
+                // transactional email to client
+                $clientBody = [
+                    'Messages' => [
+                        [
+                            'From' => [
+                                'Email' => "sergio.prieto01@outlook.com",
+                                'Name' => "ocr-bg-5"
+                            ],
+                            'To' => [
+                                [
+                                    'Email' => $email,
+                                    'Name' => "Bonjour"
+                                ]
+                            ],
+                            'TemplateID' => 3951237,
+                            'TemplateLanguage' => true,
+                            'Subject' => "ocr-bg-5",
+                        ]
+                    ]
+                ];
+
+                $response = $clientMessage->post(Resources::$Email, ['body' => $body]);
+                $clientResponse = $clientMessage->post(Resources::$Email, ['body' => $clientBody]);
+
+                if ($clientResponse->success() && $response->success()) {
                     $responseMessage = 'Données envoyées';
                 } else {
                     $responseMessage = "Oops, Une erreur s'est produit, veuillez réessayer !";
@@ -375,7 +417,6 @@ class Controller
                 $responseMessage = 'Formulaire pas complet, Veuillez réessayer !';
             }
         }
-
         require('view/contactFormAnswer.php');
     }
 
