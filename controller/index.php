@@ -157,8 +157,6 @@ class Controller
         $myPosts = $this->publicationManager->getPublicationsByUserId($userId);
         $hasUserPosts = count($myPosts) > 0;
 
-        //var_dump($hasUserPosts);
-
         require('view/postsView.php');
     }
 
@@ -178,7 +176,7 @@ class Controller
                 $this->myPosts($message);
             }
 
-            $isCreator = $userId === $post->userId();
+            $isCreator = $userId === $post->userId() || 'admin' === Session::get('USER_TYPE');
             $user = $userId ? $this->userManager->getUser($userId) : null;
             $comments = $this->commentManager->getComments($post->id());
             $disableComments = $this->commentManager->getDisabledComments($post->id());
@@ -226,6 +224,8 @@ class Controller
             $userId = Session::get('USER_ID');
             $isVisible = $post->userId() === $userId;
             $action =  $edit ? '?action=post&id=' : '?action=postEdition&id=';
+            $isCreator = $userId === $post->userId();
+            $displayValidation = $hasSession && $isCreator && count($disableComments) > 0;
 
             if ($post) {
                 require('view/postView.php');
@@ -246,9 +246,6 @@ class Controller
         if (isset($id) && isset($title) && isset($header) && isset($content)) {
             $this->publicationManager->updatePublication($id, $title, $header, $content);
             $this->post();
-            /*if (isset($post)) {
-            } else {
-            }*/
         } else {
             $message = "Erreur dans l'édition du post";
             $this->myPosts($message);

@@ -1,4 +1,4 @@
-<?php $title = 'Users'; ?>
+<?php $title = "Validation d'utilisateur"; ?>
 
 <?php ob_start(); ?>
 <?php include_once 'navBar.php'?>

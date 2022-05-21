@@ -1,4 +1,4 @@
-<?php $title = 'My posts'; ?>
+<?php $title = 'Blog OpenClassRooms OCR || My posts'; ?>
 <?php ob_start(); ?>
 <?php include_once 'navBar.php'?>
 
@@ -27,25 +27,20 @@
             <?php endif; ?>
 
             <div>
-                <?php if(isset($posts) && count($posts) > 0 ): ?>
-                <?php
-                foreach ($posts as $post) {
-                    ?>
-                    <div class="post-preview">
-                        <a href=<?php echo '/?action=post&id='.$post->id() ?>>
-                            <h2 class="post-title"><?= htmlspecialchars($post->title()) ?></h2>
-                            <h3 class="post-subtitle"><?= htmlspecialchars($post->header()) ?></h3>
-                        </a>
-                    </div>
-                    <?php if (next($posts)) :  ?>
-                        <hr />
-                    <?php endif; ?>
-                <?php } ?>
+                <?php if (isset($posts) && count($posts) > 0) : ?>
+                    <?php foreach ($posts as $post) { ?>
+                        <div class="post-preview">
+                            <a href=<?php echo '/?action=post&id=' . $post->id() ?>>
+                                <h2 class="post-title"><?= htmlspecialchars($post->title()) ?></h2>
+                                <h3 class="post-subtitle"><?= htmlspecialchars($post->header()) ?></h3>
+                            </a>
+                        </div>
+                        <?php if (next($posts)) :  ?>
+                            <hr />
+                        <?php endif; ?>
+                    <?php } ?>
                 <?php endif; ?>
-
-
             </div>
-
         </div>
     </div>
 </div>
