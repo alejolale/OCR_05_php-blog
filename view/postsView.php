@@ -1,4 +1,4 @@
-<?php $title = 'Blog OpenClassRooms OCR'; ?>
+<?php $title = 'Blog OpenClassRooms OCR || posts'; ?>
 <?php ob_start(); ?>
 <?php include_once 'navBar.php'?>
 

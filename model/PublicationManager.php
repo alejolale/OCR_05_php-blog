@@ -15,15 +15,11 @@ class PublicationManager extends Manager
         $publications = [];
         $statement =  is_null($limit) ? 'SELECT p.id, p.title, p.created_at, p.edited_at, p.header, p.content, p.user_id, CONCAT(u.firstname," ",u.lastname) AS fullname FROM publication AS p INNER JOIN user AS u ON u.id = p.user_id 
                 ORDER BY p.created_at DESC' : 'SELECT p.id, p.title, p.created_at, p.edited_at, p.header, p.content, p.user_id, CONCAT(u.firstname," ",u.lastname) AS fullname FROM publication AS p INNER JOIN user AS u ON u.id = p.user_id 
-                ORDER BY p.created_at DESC LIMIT '.$limit;
+                ORDER BY p.created_at DESC LIMIT ' . $limit;
 
         $req = $this->db->query($statement);
         $req->setFetchMode(\PDO::FETCH_ASSOC);
         $data = $req->fetchAll();
-
-        /*echo('<pre>');
-       print_r($data);
-       echo('</pre>');*/
 
         foreach ($data as $publication) {
             $publications[] = new Publication($publication);

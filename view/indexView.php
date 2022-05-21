@@ -43,6 +43,6 @@
 
 <?php include_once 'footer.php'?>
 
-<?php $content= ob_get_clean(); ?>
+<?php $content = ob_get_clean(); ?>
 
 <?php require('template.php'); ?>

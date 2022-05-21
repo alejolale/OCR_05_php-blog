@@ -27,10 +27,6 @@ class Publication
         foreach ($data as $key => $value) {
             $method = 'set' . ucfirst($key);
 
-            /*echo ('method :' . $method . " -----" . $key . "  -----" . $value);
-
-            echo('</br>');*/
-
             if (method_exists($this, $method)) {
                 // call setter
                 $this->$method($value);
@@ -98,7 +94,6 @@ class Publication
             $this->_created_at = $createdAt;
         }
     }
-
 
     public function setEdited_at(?string $editedAt)
     {

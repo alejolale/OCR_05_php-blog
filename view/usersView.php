@@ -1,4 +1,4 @@
-<?php $title = 'Users'; ?>
+<?php $title = 'Utilisateurs'; ?>
 
 <?php ob_start(); ?>
 <?php include_once 'navBar.php'?>
@@ -33,7 +33,7 @@
                     ?>
                     <tr>
                         <td>
-                            <a href=<?php echo '/?action=user&id='.$user->id() ?> >
+                            <a href=<?php echo '/?action=user&id=' . $user->id() ?> >
                                <?= htmlspecialchars($user->firstname()) ?>
                             </a>
                         </td>
@@ -43,7 +43,7 @@
                             <button type="button" id="submit" data-id="<?= $user->id() ?>" class="btn btn-primary approve" value="confirm" data-toggle="modal" data-target="#exampleModal">
                                 Valider
                             </button>
-                            <?php else: ?>
+                            <?php else : ?>
                             Validé
                             <?php endif; ?>
                         </td>
@@ -71,7 +71,7 @@
             <div class="modal-footer">
                 <form method="post" action=<?php echo '/?action=userValidation&id=' . $user->id() ?> >
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                    <button type="submit" class="deletebtn btn btn-danger">Supprimer</button>
+                    <button type="submit" class="btn btn-primary">Supprimer</button>
                 </form>
             </div>
         </div>
@@ -80,7 +80,7 @@
 
 <?php include_once 'footer.php'?>
 
-<?php $content= ob_get_clean(); ?>
+<?php $content = ob_get_clean(); ?>
 
 <?php require('template.php'); ?>
 

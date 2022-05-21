@@ -16,9 +16,9 @@
 </header>
 
 <?php
-    if (!empty($errors)) {
-        include_once 'contactForm.php';
-    }
+if (!empty($errors)) {
+    include_once 'contactForm.php';
+}
 ?>
 
 <div class="col-lg-8 col-md-10 mx-auto">
@@ -28,6 +28,6 @@
 
 <?php include_once 'footer.php'?>
 
-<?php $content= ob_get_clean(); ?>
+<?php $content = ob_get_clean(); ?>
 
 <?php require('template.php'); ?>

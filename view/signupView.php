@@ -19,10 +19,10 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-            <?php  if(!isset($user)): ?>
+            <?php  if (!isset($user)) : ?>
                 <form class="row flex-column justify-content-end" method="post" action="/?action=signup">
 
-                    <?php if(isset($message)): ?>
+                    <?php if (isset($message)) : ?>
                         <div class="alert alert-warning" role="alert">
                             <?php echo($message); ?>
                         </div>
@@ -58,7 +58,7 @@
                         <p><a class="nav-link pointer-event" href=<?php echo '/?action=login' ?>>Login</a></p>
                     </div>
                 </form>
-            <?php else: ?>
+            <?php else : ?>
                 <div class="alert alert-success" role="alert">
                     Bonjour <?php htmlspecialchars($user->firstname()); ?> et bienvenue sur le site !
                 </div>
@@ -68,7 +68,7 @@
 </div>
 
 <?php include_once 'footer.php'?>
-<?php $content= ob_get_clean(); ?>
+<?php $content = ob_get_clean(); ?>
 
 <?php require('template.php'); ?>
 
