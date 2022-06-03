@@ -51,10 +51,12 @@ class Controller
                 $userId = $user->id();
                 $userType = $user->type();
                 $firstname = $user->firstname();
+                $confirmed = $user->confirmed();
 
                 Session::put('LOGGED_USER', $email);
                 Session::put('USER_ID', $userId);
                 Session::put('USER_TYPE', $userType);
+                Session::put('USER_CONFIRMED', $confirmed);
             } else {
                 $message = "Le nom d'utilisateur ou le mot de passe est incorrect.";
             }
@@ -153,11 +155,16 @@ class Controller
     {
         $hasSession = Session::get('LOGGED_USER');
         $userId = Session::get('USER_ID');
+        $confirmed = Session::get('USER_CONFIRMED');
+        $user = $userId ? $this->userManager->getUser($userId) : null;
 
         $posts =  $this->publicationManager->getPublications();
         $myPosts = $this->publicationManager->getPublicationsByUserId($userId);
         $hasUserPosts = count($myPosts) > 0;
 
+        if ($confirmed === 0) {
+            $message = 'Veuillez attendre que votre compte soit validé pour publier, desormais vous pouvez lire et faire des commentaires sur les autres posts';
+        }
         require('view/postsView.php');
     }
 

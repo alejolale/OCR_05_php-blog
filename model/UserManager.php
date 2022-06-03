@@ -56,13 +56,15 @@ class UserManager extends Manager
     {
         try {
             $userType = 'user';
-            $req = $this->db->prepare('INSERT INTO user (firstname, lastname, email, password, type) VALUES (:firstname, :lastname, :email, :password, :type )');
+            $confirmed = 0;
+            $req = $this->db->prepare('INSERT INTO user (firstname, lastname, email, password, type, confirmed) VALUES (:firstname, :lastname, :email, :password, :type, :confirmed )');
             $req->execute(array(
                 'firstname' => $firstname,
                 'lastname' => $lastname,
                 'email' => $email,
                 'password' => $password,
-                'type' => $userType
+                'type' => $userType,
+                'confirmed' => $confirmed
             ));
             $data = $req->fetch();
             if (isset($data)) {

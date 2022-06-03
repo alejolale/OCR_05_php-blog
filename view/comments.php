@@ -14,7 +14,9 @@
                     <?= htmlspecialchars(date('d-m,  Y', strtotime($post->createdAt()))) ?>
                 </p>
             </div>
-            <hr />
+            <?php if (next($comments)) :  ?>
+                <hr />
+            <?php endif; ?>
         <?php } ?>
     </div>
 </div>

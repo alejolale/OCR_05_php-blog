@@ -10,7 +10,9 @@
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="site-heading">
                     <h1>Posts</h1>
-                    <a class="nav-link text-white underlined" href=<?php echo '/?action=myPosts' ?>><u>Consulter mes publications</u></a>
+                    <?php if ($confirmed === 1) : ?>
+                        <a class="nav-link text-white underlined" href=<?php echo '/?action=myPosts' ?>><u>Consulter mes publications</u></a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -27,7 +29,7 @@
                 </div>
             <?php endif; ?>
 
-            <?php if (isset($hasSession)) : ?>
+            <?php if (isset($hasSession) && $confirmed) : ?>
                 <h2 class="py-5">Créer un nouveau post</h2>
                 <form method="post" action="/?action=postCreation" class="pb-5">
                     <div class="mb-3">
