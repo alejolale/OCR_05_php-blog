@@ -270,6 +270,7 @@ class Controller
         $isDeletable = (int)$userId === $post->userId();
 
         if (isset($hasSession) && isset($postId) && $isDeletable) {
+            $this->publicationManager->deleteCommentaries($postId);
             $this->publicationManager->deletePublication($postId);
             $message = "Post supprimé avec succès!";
         } else {
