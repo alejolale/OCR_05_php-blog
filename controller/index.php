@@ -435,6 +435,7 @@ class Controller
 
         if (isset($id)) {
             $user = $this->userManager->getUser($id);
+            $posts = $this->publicationManager->getPublicationsByUserId($id);
             require('view/userView.php');
         } else {
             require('view/usersView.php');
