@@ -45,11 +45,11 @@
                     <form method="post" action=<?php echo '/?action=postUpdate&id=' . $post->id() ?> class="pb-5">
                         <div class="mb-3">
                             <label for="title" class="form-label">Titre du post :</label>
-                            <input value="<?= $post->title() ?>" type="text" class="form-control" id="title" name="title" placeholder="Titre.." required>
+                            <input value="<?= $post->title() ?>" type="text" class="form-control" id="title" name="title" placeholder="Titre.." required maxlength="300">
                         </div>
                         <div class="mb-3">
                             <label for="header" class="form-label">Entête du post :</label>
-                            <input value="<?= $post->header() ?>" type="text" class="form-control" id="header" name="header" placeholder="Entête.." required>
+                            <input value="<?= $post->header() ?>" type="text" class="form-control" id="header" name="header" placeholder="Entête.." required maxlength="300" required>
                         </div>
                         <div class="mb-3">
                             <label for="content" class="form-label">Contenu :</label>
@@ -60,7 +60,7 @@
                 <?php else : ?>
                     <div class="post-preview">
                         <h3 class="post-subtitle"><?= htmlspecialchars($post->header()) ?></h3>
-                        <p><?= nl2br(htmlspecialchars($post->content())) ?></p>
+                        <p><?= nl2br($post->content()) ?></p>
                         <p class="post-meta">
                             Rédigé par :
                             <?= htmlspecialchars($post->fullname()) ?>

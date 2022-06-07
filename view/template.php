@@ -28,6 +28,7 @@
     <script src="js/scripts.js"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script type="text/javascript">
+
         $(".trash").click(function () {
             const id = $(this).data('id');
             const postId = $(this).attr('data-postId');
@@ -44,5 +45,59 @@
             $('.deletebtn').text('Confirmer').attr('class','btn btn-primary');
         });
     </script>
+
+    <!--tiny-->
+    <script src="https://cdn.tiny.cloud/1/hvvk1bhs0xt9xs23nc1cryvwg9zrh7xog4inbn3psrgup3nj/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <script type="text/javascript">
+        tinymce.init({
+            selector: 'textarea#message',  //Change this value according to your HTML
+            auto_focus: 'element1',
+            width: "100%",
+            height: "200"
+        });
+
+        tinymce.init({
+            selector: 'textarea#content',  //Change this value according to your HTML
+            auto_focus: 'element1',
+            width: "100%",
+            height: "200"
+        });
+
+        tinymce.init({
+            selector: 'textarea#comment',  //Change this value according to your HTML
+            auto_focus: 'element1',
+            width: "100%",
+            height: "200"
+        });
+
+        $( document ).ready(function() {
+
+            $('#contactPost').on("click", function(){
+                tinyMCE.triggerSave();
+                document.getElementById("contact-form").submit();
+                return false;
+            });
+
+            $('#publicationPost').on("click", function(){
+                tinyMCE.triggerSave();
+                document.getElementById("publication-form").submit();
+                return false;
+            });
+
+            $('#postComment').on("click", function(){
+                tinyMCE.triggerSave();
+                document.getElementById("comment-form").submit();
+                return false;
+            });
+
+        });
+
+
+    </script>
+
+
+
+
 </html>
 

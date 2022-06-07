@@ -71,7 +71,7 @@
             <div class="modal-footer">
                 <form method="post" action=<?php echo '/?action=userValidation&id=' . $user->id() ?> >
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Supprimer</button>
+                    <button type="submit" class="btn btn-primary">valider</button>
                 </form>
             </div>
         </div>

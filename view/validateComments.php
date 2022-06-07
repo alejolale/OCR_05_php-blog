@@ -15,7 +15,7 @@
           <tr>
               <th scope="row"><?= htmlspecialchars(date('d/m/Y', strtotime($comment->createdAt()))) ?></th>
               <td><?= htmlspecialchars($comment->userName()) ?></td>
-              <td><?= htmlspecialchars($comment->content()) ?></td>
+              <td><?= $comment->content() ?></td>
               <td class="d-flex flex-row align-items-center">
                   <button type="button" id="submit" data-id="<?= $comment->id() ?>" data-postId="<?= $comment->publicationId() ?>" class="btn btn-primary approve" value="approve" data-toggle="modal" data-target="#deleteModal">
                           Valider
