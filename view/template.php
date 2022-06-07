@@ -72,7 +72,6 @@
         });
 
         $( document ).ready(function() {
-
             $('#contactPost').on("click", function(){
                 tinyMCE.triggerSave();
                 document.getElementById("contact-form").submit();
@@ -90,14 +89,7 @@
                 document.getElementById("comment-form").submit();
                 return false;
             });
-
         });
-
-
     </script>
-
-
-
-
 </html>
 
