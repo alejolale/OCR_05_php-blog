@@ -103,4 +103,12 @@ class PublicationManager extends Manager
             'id' => $id,
         ));
     }
+
+    public function deleteCommentaries($id)
+    {
+        $req = $this->db->prepare('DELETE FROM commentary WHERE publication_id= :id');
+        $req->execute(array(
+            'id' => $id,
+        ));
+    }
 }
