@@ -5,7 +5,7 @@
     <div class="card-body">
         <?php foreach ($comments as $comment) {
             ?>
-            <p class="card-text"><?= htmlspecialchars($comment->content()) ?></p>
+            <p class="card-text"><?= $comment->content() ?></p>
             <div class="post-preview">
                 <p class="post-meta">
                     Commenté par :

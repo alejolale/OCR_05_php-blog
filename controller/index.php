@@ -368,6 +368,7 @@ class Controller
 
                 $clientMessage = new Client('5e12f661454a2a6560005369c577f777', '23a96750389fb13b739362f54817de9f', true, ['version' => 'v3.1']);
 
+                $text = \Soundasleep\Html2Text::convert($message);
                 // Email to admin
                 $body = [
                     'Messages' => [
@@ -386,7 +387,7 @@ class Controller
                             'TextPart' => "Greetings from Mailjet!",
                             'HTMLPart' => "<h3>Nouveau message de $firstname $lastname!</h3>
                                 <br /><h4>Email : </h4>$email
-                                <br /><h4>Message : </h4>$message"
+                                <br /><h4>Message : </h4>$text"
                         ]
                     ]
                 ];
