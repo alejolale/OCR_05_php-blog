@@ -31,7 +31,7 @@
 
             <?php if (isset($hasSession) && $confirmed) : ?>
                 <h2 class="py-5">Créer un nouveau post</h2>
-                <form method="post" action="/?action=postCreation" class="pb-5">
+                <form id="publication-form" method="post" action="/?action=postCreation" class="pb-5">
                     <div class="mb-3">
                         <label for="title" class="form-label">Titre du post :</label>
                         <input type="text" class="form-control" id="title" name="title" placeholder="Titre.." required>
@@ -44,7 +44,7 @@
                         <label for="content" class="form-label">Contenu :</label>
                         <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Creer nouveau post</button>
+                    <button type="submit" id="publicationPost" class="btn btn-primary">Creer nouveau post</button>
                 </form>
             <?php endif; ?>
             <?php include_once 'posts.php' ?>

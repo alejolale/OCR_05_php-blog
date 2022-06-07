@@ -60,7 +60,7 @@
                 <?php else : ?>
                     <div class="post-preview">
                         <h3 class="post-subtitle"><?= htmlspecialchars($post->header()) ?></h3>
-                        <p><?= nl2br(htmlspecialchars($post->content())) ?></p>
+                        <p><?= nl2br($post->content()) ?></p>
                         <p class="post-meta">
                             Rédigé par :
                             <?= htmlspecialchars($post->fullname()) ?>

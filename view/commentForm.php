@@ -1,6 +1,6 @@
 <?php if (!$edit) : ?>
     <h3 class="py-5">Créer un nouveau commentaire</h3>
-    <form method="post" action=<?php echo '/?action=commentCreation&id=' . $post->id() ?> class="pb-5">
+    <form id="comment-form" method="post" action=<?php echo '/?action=commentCreation&id=' . $post->id() ?> class="pb-5">
         <div class="mb-3">
             <label for="user" class="form-label">username :</label>
             <input
@@ -15,6 +15,6 @@
             <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="ici votre commentaire..." required></textarea>
             <input type="hidden" name="userId" value=<?= $userId ? $userId : null ?>>
         </div>
-        <button type="submit" class="btn btn-primary">Creer</button>
+        <button id="postComment" type="submit" class="btn btn-primary">Creer</button>
     </form>
 <?php endif; ?>
