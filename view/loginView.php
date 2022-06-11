@@ -28,14 +28,14 @@
                     </div>
                 <?php endif; ?>
 
-                <div class="row justify-content-between">
+                <div class="row justify-content-between form-group">
                     <label  for="email">Email : </label>
-                    <input class="col-lg-6" id="email" name="email" required type="email" />
+                    <input class="col-12 col-lg-6 form-control" id="email" name="email" required type="email" />
                 </div>
 
-                <div class="row justify-content-between mt-4">
+                <div class="row justify-content-between mt-4 form-group">
                     <label for="password" >Mot de passe : </label>
-                    <input class="col-lg-6" id="password" name="password" required type="password" />
+                    <input class="col-lg-6 form-control" id="password" name="password" required type="password" />
                 </div>
 
                 <div class="mx-auto mt-3 text-center">

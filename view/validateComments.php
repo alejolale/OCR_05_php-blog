@@ -1,6 +1,6 @@
 <h3 class="py-5">Validation des commentaires</h3>
 <br>
-<table class="table">
+<table class="table table-responsive">
   <thead class="thead-dark">
     <tr>
       <th scope="col">Date</th>
